@@ -1,0 +1,9 @@
+{
+  "name": "zhuyin-school",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node scripts/validate.js && node scripts/test-logic.js",
+    "start": "python -m http.server 8765"
+  }
+}

@@ -1,0 +1,885 @@
+{
+  "preferredVoices": [
+    "zh-TW-HsiaoChenNeural",
+    "zh-TW-HsiaoYuNeural",
+    "zh-TW-YunJheNeural"
+  ],
+  "items": [
+    {
+      "kind": "symbol",
+      "id": "ㄅ",
+      "file": "audio/symbols/F1.WAV",
+      "speak": "玻",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F1.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄆ",
+      "file": "audio/symbols/F2.WAV",
+      "speak": "坡",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F2.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄇ",
+      "file": "audio/symbols/F3.WAV",
+      "speak": "摸",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F3.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄈ",
+      "file": "audio/symbols/F4.WAV",
+      "speak": "佛",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F4.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄉ",
+      "file": "audio/symbols/F5.WAV",
+      "speak": "得",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F5.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄊ",
+      "file": "audio/symbols/F6.WAV",
+      "speak": "特",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F6.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄋ",
+      "file": "audio/symbols/F7.WAV",
+      "speak": "訥",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F7.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄌ",
+      "file": "audio/symbols/F8.WAV",
+      "speak": "勒",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F8.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄍ",
+      "file": "audio/symbols/F9.WAV",
+      "speak": "哥",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F9.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄎ",
+      "file": "audio/symbols/F10.WAV",
+      "speak": "科",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F10.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄏ",
+      "file": "audio/symbols/F11.WAV",
+      "speak": "喝",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F11.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄐ",
+      "file": "audio/symbols/F12.WAV",
+      "speak": "基",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F12.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄑ",
+      "file": "audio/symbols/F13.WAV",
+      "speak": "欺",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F13.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄒ",
+      "file": "audio/symbols/F14.WAV",
+      "speak": "希",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F14.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄓ",
+      "file": "audio/symbols/F15.WAV",
+      "speak": "知",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F15.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄔ",
+      "file": "audio/symbols/F16.WAV",
+      "speak": "痴",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F16.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄕ",
+      "file": "audio/symbols/F17.WAV",
+      "speak": "詩",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F17.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄖ",
+      "file": "audio/symbols/F18.WAV",
+      "speak": "日",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F18.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄗ",
+      "file": "audio/symbols/F19.WAV",
+      "speak": "資",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F19.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄘ",
+      "file": "audio/symbols/F20.WAV",
+      "speak": "雌",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F20.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄙ",
+      "file": "audio/symbols/F21.WAV",
+      "speak": "思",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F21.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄧ",
+      "file": "audio/symbols/F35.WAV",
+      "speak": "衣",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F35.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄨ",
+      "file": "audio/symbols/F36.WAV",
+      "speak": "烏",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F36.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄩ",
+      "file": "audio/symbols/F37.WAV",
+      "speak": "迂",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F37.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄚ",
+      "file": "audio/symbols/F22.WAV",
+      "speak": "啊",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F22.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄛ",
+      "file": "audio/symbols/F23.WAV",
+      "speak": "喔",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F23.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄜ",
+      "file": "audio/symbols/F24.WAV",
+      "speak": "鵝",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F24.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄝ",
+      "file": "audio/symbols/F25.WAV",
+      "speak": "誒",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F25.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄞ",
+      "file": "audio/symbols/F26.WAV",
+      "speak": "哀",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F26.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄟ",
+      "file": "audio/symbols/F27.WAV",
+      "speak": "欸",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F27.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄠ",
+      "file": "audio/symbols/F28.WAV",
+      "speak": "熬",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F28.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄡ",
+      "file": "audio/symbols/F29.WAV",
+      "speak": "歐",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F29.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄢ",
+      "file": "audio/symbols/F30.WAV",
+      "speak": "安",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F30.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄣ",
+      "file": "audio/symbols/F31.WAV",
+      "speak": "恩",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F31.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄤ",
+      "file": "audio/symbols/F32.WAV",
+      "speak": "昂",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F32.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄥ",
+      "file": "audio/symbols/F33.WAV",
+      "speak": "亨",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F33.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "symbol",
+      "id": "ㄦ",
+      "file": "audio/symbols/F34.WAV",
+      "speak": "兒",
+      "status": "ready",
+      "source": "教育部《國語注音符號手冊》開放部件",
+      "license": "CC BY 4.0",
+      "originalName": "F34.WAV",
+      "note": "檔名與內容未改。對應依手冊 HTML 的播放標記。尚未人工試聽，不能把備援呼讀字當成已核對的讀音。"
+    },
+    {
+      "kind": "word",
+      "id": "ba4-ba",
+      "file": "audio/words/ba4-ba.mp3",
+      "speak": "爸爸",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "ma1-ma",
+      "file": "audio/words/ma1-ma.mp3",
+      "speak": "媽媽",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "ge1-ge",
+      "file": "audio/words/ge1-ge.mp3",
+      "speak": "哥哥",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "jie3-jie",
+      "file": "audio/words/jie3-jie.mp3",
+      "speak": "姐姐",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "mi3-fan4",
+      "file": "audio/words/mi3-fan4.mp3",
+      "speak": "米飯",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "mian4-bao1",
+      "file": "audio/words/mian4-bao1.mp3",
+      "speak": "麵包",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "niu2-nai3",
+      "file": "audio/words/niu2-nai3.mp3",
+      "speak": "牛奶",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "dan4-gao1",
+      "file": "audio/words/dan4-gao1.mp3",
+      "speak": "蛋糕",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "ping2-guo3",
+      "file": "audio/words/ping2-guo3.mp3",
+      "speak": "蘋果",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "xiang1-jiao1",
+      "file": "audio/words/xiang1-jiao1.mp3",
+      "speak": "香蕉",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "xi1-gua1",
+      "file": "audio/words/xi1-gua1.mp3",
+      "speak": "西瓜",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "pu2-tao2",
+      "file": "audio/words/pu2-tao2.mp3",
+      "speak": "葡萄",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "xiao3-gou3",
+      "file": "audio/words/xiao3-gou3.mp3",
+      "speak": "小狗",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "xiao3-mao1",
+      "file": "audio/words/xiao3-mao1.mp3",
+      "speak": "小貓",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "tu4-zi0",
+      "file": "audio/words/tu4-zi0.mp3",
+      "speak": "兔子",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "da4-xiang4",
+      "file": "audio/words/da4-xiang4.mp3",
+      "speak": "大象",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "lao3-hu3",
+      "file": "audio/words/lao3-hu3.mp3",
+      "speak": "老虎",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "ji1",
+      "file": "audio/words/ji1.mp3",
+      "speak": "雞",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "zhu1",
+      "file": "audio/words/zhu1.mp3",
+      "speak": "豬",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "yu2",
+      "file": "audio/words/yu2.mp3",
+      "speak": "魚",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "e2",
+      "file": "audio/words/e2.mp3",
+      "speak": "鵝",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "mao1",
+      "file": "audio/words/mao1.mp3",
+      "speak": "貓",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "gou3",
+      "file": "audio/words/gou3.mp3",
+      "speak": "狗",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "qi4-che1",
+      "file": "audio/words/qi4-che1.mp3",
+      "speak": "汽車",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "huo3-che1",
+      "file": "audio/words/huo3-che1.mp3",
+      "speak": "火車",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "gong1-che1",
+      "file": "audio/words/gong1-che1.mp3",
+      "speak": "公車",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "fei1-ji1",
+      "file": "audio/words/fei1-ji1.mp3",
+      "speak": "飛機",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "ka3-che1",
+      "file": "audio/words/ka3-che1.mp3",
+      "speak": "卡車",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "che1",
+      "file": "audio/words/che1.mp3",
+      "speak": "車",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "yi1-fu2",
+      "file": "audio/words/yi1-fu2.mp3",
+      "speak": "衣服",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "xie2-zi0",
+      "file": "audio/words/xie2-zi0.mp3",
+      "speak": "鞋子",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "shu1-bao1",
+      "file": "audio/words/shu1-bao1.mp3",
+      "speak": "書包",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "bei1-zi0",
+      "file": "audio/words/bei1-zi0.mp3",
+      "speak": "杯子",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "er3-duo3",
+      "file": "audio/words/er3-duo3.mp3",
+      "speak": "耳朵",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "shu1",
+      "file": "audio/words/shu1.mp3",
+      "speak": "書",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "bei1",
+      "file": "audio/words/bei1.mp3",
+      "speak": "杯",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "bao1",
+      "file": "audio/words/bao1.mp3",
+      "speak": "包",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "men2",
+      "file": "audio/words/men2.mp3",
+      "speak": "門",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "ba4",
+      "file": "audio/words/ba4.mp3",
+      "speak": "爸",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "tai4-yang2",
+      "file": "audio/words/tai4-yang2.mp3",
+      "speak": "太陽",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "xing1-xing1",
+      "file": "audio/words/xing1-xing1.mp3",
+      "speak": "星星",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "hua1",
+      "file": "audio/words/hua1.mp3",
+      "speak": "花",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "hua1-duo3",
+      "file": "audio/words/hua1-duo3.mp3",
+      "speak": "花朵",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "shan1",
+      "file": "audio/words/shan1.mp3",
+      "speak": "山",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "feng1",
+      "file": "audio/words/feng1.mp3",
+      "speak": "風",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "yu3",
+      "file": "audio/words/yu3.mp3",
+      "speak": "雨",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "cao3",
+      "file": "audio/words/cao3.mp3",
+      "speak": "草",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "ye4-zi0",
+      "file": "audio/words/ye4-zi0.mp3",
+      "speak": "葉子",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "bo1",
+      "file": "audio/words/bo1.mp3",
+      "speak": "波",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "qiu2",
+      "file": "audio/words/qiu2.mp3",
+      "speak": "球",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "qi4-qiu2",
+      "file": "audio/words/qi4-qiu2.mp3",
+      "speak": "氣球",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "gua1",
+      "file": "audio/words/gua1.mp3",
+      "speak": "瓜",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "ba1",
+      "file": "audio/words/ba1.mp3",
+      "speak": "八",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "san1",
+      "file": "audio/words/san1.mp3",
+      "speak": "三",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "he1",
+      "file": "audio/words/he1.mp3",
+      "speak": "喝",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "ge1",
+      "file": "audio/words/ge1.mp3",
+      "speak": "歌",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "mo1",
+      "file": "audio/words/mo1.mp3",
+      "speak": "摸",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "fei1",
+      "file": "audio/words/fei1.mp3",
+      "speak": "飛",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "bai2",
+      "file": "audio/words/bai2.mp3",
+      "speak": "白",
+      "status": "missing"
+    },
+    {
+      "kind": "word",
+      "id": "rou4",
+      "file": "audio/words/rou4.mp3",
+      "speak": "肉",
+      "status": "missing"
+    },
+    {
+      "kind": "feedback",
+      "id": "good",
+      "file": "audio/feedback/good.mp3",
+      "speak": "你好棒",
+      "status": "missing"
+    },
+    {
+      "kind": "feedback",
+      "id": "again",
+      "file": "audio/feedback/again.mp3",
+      "speak": "再聽一次",
+      "status": "missing"
+    },
+    {
+      "kind": "feedback",
+      "id": "look",
+      "file": "audio/feedback/look.mp3",
+      "speak": "再看看",
+      "status": "missing"
+    },
+    {
+      "kind": "feedback",
+      "id": "yes",
+      "file": "audio/feedback/yes.mp3",
+      "speak": "是這個",
+      "status": "missing"
+    },
+    {
+      "kind": "instruction",
+      "id": "listen",
+      "file": "audio/instruction/listen.mp3",
+      "speak": "聽一聽，點出一樣的",
+      "status": "missing"
+    },
+    {
+      "kind": "instruction",
+      "id": "blend",
+      "file": "audio/instruction/blend.mp3",
+      "speak": "拼一拼",
+      "status": "missing"
+    },
+    {
+      "kind": "instruction",
+      "id": "home",
+      "file": "audio/instruction/home.mp3",
+      "speak": "選一個遊戲",
+      "status": "missing"
+    }
+  ]
+}
