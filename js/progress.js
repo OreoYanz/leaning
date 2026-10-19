@@ -14,7 +14,7 @@ function empty() {
     muted: false,
     calm: false,
     avatar: "shiro",
-    coins: 100,
+    coins: 0,
     unlocked: ["shiro"],
     updatedAt: 0
   };
@@ -53,7 +53,7 @@ export function createProgress(storage) {
       const coins = Number(parsed.coins);
       const savedCoins = Number.isFinite(coins) && coins > 0 ? Math.floor(coins) : 0;
       const onlyStarter = data.unlocked.length === 1 && data.unlocked[0] === "shiro";
-      data.coins = onlyStarter && (savedCoins === 0 || savedCoins === 10) ? 100 : savedCoins;
+      data.coins = onlyStarter && savedCoins === 100 ? 0 : savedCoins;
       if (!data.unlocked.includes(data.avatar)) data.avatar = "shiro";
       return data;
     } catch (error) {

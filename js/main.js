@@ -18,7 +18,7 @@ import {
   learnQuestion,
   recallQuestion
 } from "./logic.js";
-import { createProgress } from "./progress.js?v=100";
+import { createProgress } from "./progress.js?v=0";
 
 const PAIRS = [["ㄅ", "ㄆ"], ["ㄉ", "ㄊ"], ["ㄍ", "ㄎ"], ["ㄓ", "ㄗ"], ["ㄢ", "ㄤ"], ["ㄋ", "ㄌ"], ["ㄣ", "ㄥ"], ["ㄚ", "ㄛ"]];
 const GROUPS = [["sheng", "聲母"], ["jie", "介音"], ["yun", "韻母"], ["all", "全部"]];
