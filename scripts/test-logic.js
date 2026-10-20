@@ -6,6 +6,7 @@ import {
   formatSyllable,
   formatWord,
   gradeBuild,
+  gradeRocket,
   COIN_SHORT,
   GACHA_COST,
   gachaPull,
@@ -17,10 +18,13 @@ import {
   listenChoiceCount,
   partChoices,
   recallQuestion,
+  rocketBank,
+  rocketSlots,
   structureIssues,
   syllableStage,
   takeOptions,
   teachingSpot,
+  toRocketWord,
   wordStage,
   wrongKeepsGoing
 } from "../js/logic.js";
@@ -127,7 +131,7 @@ const banana = words.find((word) => word.word === "香蕉");
 const dadPlan = hanPlan(dad);
 const applePlan = hanPlan(apple);
 check("爸爸逐字對應", dadPlan.ok && dadPlan.cells.length === 2 && dadPlan.cells[0].char === "爸" && dadPlan.cells[1].char === "爸");
-check("四聲在最後符號旁", dadPlan.cells[0].toneMark === "ˋ" && dadPlan.cells[0].light === false && dadPlan.cells[0].symbols.at(-1) === "ㄚ");
+check("四聲有聲調符號", dadPlan.cells[0].toneMark === "ˋ" && dadPlan.cells[0].light === false && dadPlan.cells[0].symbols.at(-1) === "ㄚ");
 check("輕聲點在音節上方", dadPlan.cells[1].light === true && dadPlan.cells[1].toneMark === "");
 check("二聲位置", applePlan.cells[0].toneMark === "ˊ" && applePlan.cells[0].symbols.join("") === "ㄆㄧㄥ");
 check("三聲位置", hanPlan(words.find((word) => word.word === "狗")).cells[0].toneMark === "ˇ");
@@ -136,8 +140,8 @@ const mismatch = hanPlan({ word: "爸爸", zhuyin: "ㄅㄚˋ", syllables: [dad.s
 check("字數不一致不會排版", mismatch.ok === false && !hanMarkup({ word: "爸爸", zhuyin: "ㄅㄚˋ", syllables: [dad.syllables[0]] }).includes("ㄅ"));
 check("缺少注音會被標出", hanMarkup({ word: "爸爸", syllables: [] }).includes('data-han="missing"'));
 const dadHtml = hanMarkup(dad);
-check("四聲標在韻母旁", dadHtml.includes("ㄚ<i class=\"tone-mark\">ˋ</i>"));
-check("輕聲標在直排上方", dadHtml.includes("<span class=\"tone-light\">˙</span><span class=\"han-stack\">"));
+check("四聲標在注音中間偏右", dadHtml.includes("<span class=\"han-stack\">") && dadHtml.includes("</span><i class=\"tone-mark\">ˋ</i></span>"));
+check("輕聲標在直排上方", dadHtml.includes("<span class=\"tone-light\">˙</span><span class=\"han-zy-body\">"));
 
 const bExamples = [
   { word: "爸爸", emoji: "👨", syllables: dad.syllables },
@@ -151,7 +155,26 @@ const firstRecall = recallQuestion({ id: "ㄅ", group: "sheng" }, bExamples, oth
 const secondRecall = recallQuestion({ id: "ㄅ", group: "sheng" }, bExamples, otherExamples, [firstRecall.answer], () => 0.2);
 check("複習會換例詞", firstRecall.answer !== secondRecall.answer);
 check("答錯後仍可繼續", wrongKeepsGoing(1).blocked === false && wrongKeepsGoing(1).hint && wrongKeepsGoing(2).reveal);
-check("四種玩法都有回想", ["learn", "listen", "boss", "free"].every((name) => LEARNING_LOOPS[name]));
+check("四種玩法都有回想", ["learn", "listen", "boss", "rocket"].every((name) => LEARNING_LOOPS[name]));
+
+const appleRocket = toRocketWord(words.find((word) => word.word === "蘋果"));
+check("蘋果火箭字數", appleRocket?.characters.length === 2);
+check("蘋果火箭注音段", appleRocket.characters[0].letters.join("") === "ㄆㄧㄥ" && appleRocket.characters[1].letters.join("") === "ㄍㄨㄛ");
+check("蘋果火箭聲調翼", appleRocket.characters[0].tone === "ˊ" && appleRocket.characters[1].tone === "ˇ");
+const appleSlots = rocketSlots(appleRocket);
+check("蘋果火箭零件數", appleSlots.filter((item) => item.kind === "letter").length === 6 && appleSlots.filter((item) => item.kind === "tone").length === 2);
+const appleFills = Object.fromEntries(appleSlots.map((slot) => [slot.key, slot.answer]));
+check("蘋果火箭可發射", gradeRocket(appleRocket, appleFills).ok);
+check("蘋果火箭缺件不可發射", !gradeRocket(appleRocket, {}).ok);
+const badFills = { ...appleFills, "T0": "ˇ" };
+check("蘋果火箭錯聲調會標出", gradeRocket(appleRocket, badFills).keys.includes("T0") && !gradeRocket(appleRocket, badFills).ok);
+const appleBank = rocketBank(appleRocket, () => 0.2);
+check("蘋果火箭零件庫有正確注音", ["ㄆ", "ㄧ", "ㄥ", "ㄍ", "ㄨ", "ㄛ"].every((mark) => appleBank.letters.includes(mark)));
+check("蘋果火箭聲調庫有二三聲", appleBank.tones.includes("ˊ") && appleBank.tones.includes("ˇ"));
+const bananaRocket = toRocketWord(words.find((word) => word.word === "香蕉"));
+check("一聲火箭翼是空的", bananaRocket.characters.every((item) => item.tone === ""));
+const lightRocket = toRocketWord(words.find((word) => word.word === "杯子"));
+check("輕聲火箭翼在點", lightRocket.characters[1].tone === "˙");
 
 const uiSource = `${readFileSync(new URL("../js/main.js", import.meta.url), "utf8")}\n${readFileSync(new URL("../js/logic.js", import.meta.url), "utf8")}`;
 const actions = [...uiSource.matchAll(/data-act="([a-z-]+)"/g)].map((match) => match[1]);

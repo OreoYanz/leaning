@@ -3,45 +3,6 @@ import { formatWord, structureIssues, teachingSpot } from "../js/logic.js";
 
 const SHENG = new Set("ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙ".split(""));
 const MEDIALS = new Set(["ㄧ", "ㄨ", "ㄩ"]);
-const PRIMARY = {
-  "ㄅ": "爸爸",
-  "ㄆ": "葡萄",
-  "ㄇ": "媽媽",
-  "ㄈ": "飛機",
-  "ㄉ": "大象",
-  "ㄊ": "兔子",
-  "ㄋ": "牛奶",
-  "ㄌ": "老虎",
-  "ㄍ": "哥哥",
-  "ㄎ": "卡車",
-  "ㄏ": "花朵",
-  "ㄐ": "雞",
-  "ㄑ": "氣球",
-  "ㄒ": "西瓜",
-  "ㄓ": "豬",
-  "ㄔ": "車",
-  "ㄕ": "書",
-  "ㄖ": "肉",
-  "ㄗ": "早安",
-  "ㄘ": "草莓",
-  "ㄙ": "三",
-  "ㄧ": "衣服",
-  "ㄨ": "烏龜",
-  "ㄩ": "魚",
-  "ㄚ": "阿姨",
-  "ㄛ": "波",
-  "ㄜ": "鵝",
-  "ㄝ": "葉子",
-  "ㄞ": "愛心",
-  "ㄟ": "杯子",
-  "ㄠ": "貓",
-  "ㄡ": "狗",
-  "ㄢ": "安全",
-  "ㄣ": "門",
-  "ㄤ": "湯",
-  "ㄥ": "風",
-  "ㄦ": "耳朵"
-};
 
 function parseSyllable(token) {
   let tone = 1;
@@ -107,11 +68,11 @@ function decorate(symbol, entry) {
 }
 
 const symbols = JSON.parse(readFileSync(new URL("../data/symbols.json", import.meta.url)));
-const words = JSON.parse(readFileSync(new URL("../data/words.json", import.meta.url)));
 const lexicon = readFileSync(new URL("../data/teach-lexicon.txt", import.meta.url), "utf8");
 const byId = new Map(symbols.map((symbol) => [symbol.id, symbol]));
 const buckets = new Map(symbols.map((symbol) => [symbol.id, []]));
 const seen = new Map(symbols.map((symbol) => [symbol.id, new Set()]));
+const primaryOf = new Map();
 
 function add(symbol, entry) {
   const spot = teachingSpot(symbol.group, symbol.id, entry);
@@ -119,17 +80,6 @@ function add(symbol, entry) {
   seen.get(symbol.id).add(entry.word);
   buckets.get(symbol.id).push(entry);
   return true;
-}
-
-for (const word of words) {
-  const entry = {
-    word: word.word,
-    emoji: String(word.image).replace(/^emoji:/, ""),
-    syllables: word.syllables,
-    zhuyin: word.zhuyin,
-    category: word.category || "daily"
-  };
-  for (const symbol of symbols) add(symbol, entry);
 }
 
 let current = "";
@@ -159,6 +109,7 @@ lexicon.split(/\r?\n/).forEach((line, index) => {
     problems.push(`${entry.word} 放在 ${current}，但第一個音節不是這個符號的教學位置`);
     return;
   }
+  if (!primaryOf.has(current)) primaryOf.set(current, entry.word);
   add(symbol, entry);
 });
 if (problems.length) {
@@ -170,24 +121,13 @@ const output = {};
 const short = [];
 for (const symbol of symbols) {
   const list = buckets.get(symbol.id);
-  const primary = PRIMARY[symbol.id];
+  const primary = primaryOf.get(symbol.id);
   list.sort((a, b) => Number(b.word === primary) - Number(a.word === primary));
-  if (!list.some((item) => item.word === primary)) short.push(`${symbol.id} 缺少主要例詞 ${primary}`);
-  const chosen = list.slice(0, 36).map((item) => decorate(symbol, item));
+  if (!primary || !list.some((item) => item.word === primary)) short.push(`${symbol.id} 缺少主要例詞`);
+  const chosen = list.map((item) => decorate(symbol, item));
   output[symbol.id] = chosen;
-  if (chosen.length < 30) short.push(`${symbol.id} ${chosen.length}`);
-  const main = chosen[0];
-  symbol.example = {
-    word: main.word,
-    zhuyin: main.zhuyin,
-    emoji: main.emoji,
-    syllables: main.syllables,
-    target: symbol.id,
-    spot: main.spot,
-    checked: false,
-    review: "developer",
-    category: main.category
-  };
+  if (!chosen.length) short.push(`${symbol.id} 沒有例詞`);
+  delete symbol.example;
 }
 
 if (short.length) {

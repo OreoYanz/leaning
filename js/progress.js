@@ -8,7 +8,6 @@ function empty() {
     listenAsked: 0,
     listenCorrect: 0,
     bossClears: 0,
-    stickers: 0,
     lastMode: "",
     lastStage: 1,
     muted: false,
@@ -55,6 +54,7 @@ export function createProgress(storage) {
       const onlyStarter = data.unlocked.length === 1 && data.unlocked[0] === "shiro";
       data.coins = onlyStarter && savedCoins === 100 ? 0 : savedCoins;
       if (!data.unlocked.includes(data.avatar)) data.avatar = "shiro";
+      delete data.stickers;
       return data;
     } catch (error) {
       console.warn("學習紀錄讀取失敗，改以這次遊玩為準", error);
@@ -110,7 +110,6 @@ export function createProgress(storage) {
       data.bossClears += 1;
       data.lastMode = "boss";
       data.lastStage = stage;
-      data.stickers += 1;
       save();
     },
     visit(mode) {

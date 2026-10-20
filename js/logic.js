@@ -168,7 +168,7 @@ export const LEARNING_LOOPS = {
   learn: "picture-quiz",
   listen: "recall-word",
   boss: "build-word",
-  free: "find-symbol"
+  rocket: "rocket-build"
 };
 
 const STANDALONE_YUN = new Set(["ㄚ", "ㄛ", "ㄜ", "ㄞ", "ㄟ", "ㄠ", "ㄡ", "ㄢ", "ㄣ", "ㄤ", "ㄦ"]);
@@ -231,6 +231,84 @@ export function toneMark(tone) {
   return "";
 }
 
+export function rocketTone(tone) {
+  const value = Number(tone);
+  if (value === 0) return "˙";
+  if (value === 2) return "ˊ";
+  if (value === 3) return "ˇ";
+  if (value === 4) return "ˋ";
+  return "";
+}
+
+export function toRocketWord(word) {
+  const text = String(word?.word || "");
+  const syllables = word?.syllables || [];
+  const chars = hanChars(text);
+  if (!chars.length || chars.length !== syllables.length) return null;
+  if (word.zhuyin && formatWord(word) !== word.zhuyin) return null;
+  return {
+    id: word.id,
+    word: text,
+    image: word.image || "",
+    audio: word.audio || "",
+    characters: chars.map((char, index) => {
+      const syllable = syllables[index];
+      return {
+        char,
+        letters: [syllable.initial, syllable.medial, syllable.final].filter(Boolean),
+        tone: rocketTone(syllable.tone)
+      };
+    })
+  };
+}
+
+export function rocketSlots(rocket) {
+  const slots = [];
+  (rocket?.characters || []).forEach((item, charIndex) => {
+    item.letters.forEach((letter, letterIndex) => {
+      slots.push({
+        key: `L${charIndex}-${letterIndex}`,
+        kind: "letter",
+        charIndex,
+        letterIndex,
+        answer: letter
+      });
+    });
+    slots.push({
+      key: `T${charIndex}`,
+      kind: "tone",
+      charIndex,
+      answer: item.tone
+    });
+  });
+  return slots;
+}
+
+export function gradeRocket(rocket, fills) {
+  const keys = [];
+  for (const slot of rocketSlots(rocket)) {
+    const got = fills?.[slot.key];
+    if (got === null || got === undefined || String(got) !== String(slot.answer)) keys.push(slot.key);
+  }
+  return { ok: keys.length === 0, key: keys[0] || "", keys };
+}
+
+export function rocketBank(rocket, random = Math.random) {
+  const needLetters = (rocket?.characters || []).flatMap((item) => item.letters);
+  const letterPool = [...new Set([...SHENG, ...MEDIALS, ...SIMPLE_FINALS, ...COMPOUND_FINALS])];
+  const extras = shuffle(letterPool.filter((item) => !needLetters.includes(item)), random).slice(0, 4);
+  return {
+    letters: shuffle([...needLetters, ...extras], random),
+    tones: ["", "ˊ", "ˇ", "ˋ", "˙"]
+  };
+}
+
+export function rocketCharComplete(rocket, fills, charIndex) {
+  return rocketSlots(rocket)
+    .filter((slot) => slot.charIndex === charIndex)
+    .every((slot) => fills?.[slot.key] !== null && fills?.[slot.key] !== undefined);
+}
+
 export function hanPlan(word) {
   const text = String(word?.word || "");
   const syllables = word?.syllables || [];
@@ -265,18 +343,11 @@ export function hanMarkup(word, options = {}) {
   const text = escHan(word?.word || "");
   if (!plan.ok) return `<span class="han-word" data-han="missing">${text}</span>`;
   const cells = plan.cells.map((cell, index) => {
-    const stack = cell.symbols.map((symbol, symbolIndex) => {
-      const last = symbolIndex === cell.symbols.length - 1;
-      const mark = last && cell.toneMark ? `<i class="tone-mark">${escHan(cell.toneMark)}</i>` : "";
-      const spot = options.spots
-        ? ` data-act="free-spot" data-id="${escHan(options.id || "")}" data-symbol="${escHan(symbol)}" data-index="${index}"`
-        : "";
-      const body = `${escHan(symbol)}${mark}`;
-      return last ? `<span class="han-tail"${spot}>${body}</span>` : `<span${spot}>${escHan(symbol)}</span>`;
-    }).join("");
+    const stack = cell.symbols.map((symbol) => `<span>${escHan(symbol)}</span>`).join("");
     const light = cell.light ? `<span class="tone-light">˙</span>` : "";
+    const mark = cell.toneMark ? `<i class="tone-mark">${escHan(cell.toneMark)}</i>` : "";
     const on = options.highlight === index ? " on" : "";
-    return `<span class="han${on}"><span class="han-char">${escHan(cell.char)}</span><span class="han-zy">${light}<span class="han-stack">${stack}</span></span></span>`;
+    return `<span class="han${on}"><span class="han-char">${escHan(cell.char)}</span><span class="han-zy">${light}<span class="han-zy-body"><span class="han-stack">${stack}</span>${mark}</span></span></span>`;
   }).join("");
   return `<span class="han-word">${cells}</span>`;
 }
