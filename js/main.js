@@ -163,35 +163,58 @@ function clearRocketDrag() {
   document.querySelectorAll(".craft-drop.is-lifted").forEach((node) => node.classList.remove("is-lifted"));
 }
 
+/* 幽靈浮在手指上方，命中點跟著往上偏，才會對準亮起來的格子 */
+const ROCKET_AIM_LIFT = 46;
+
+function rocketAimPoint(clientX, clientY) {
+  return { x: clientX, y: clientY - ROCKET_AIM_LIFT };
+}
+
 function rocketDropAt(x, y, kind, exceptKey = "") {
-  const direct = document.elementFromPoint(x, y)?.closest(".craft-drop");
-  if (
-    direct &&
-    (!kind || direct.dataset.kind === kind) &&
-    !direct.disabled &&
-    direct.dataset.key !== exceptKey
-  ) {
-    return direct;
-  }
   const pads = kind
     ? document.querySelectorAll(`.craft-drop[data-kind="${kind}"]`)
     : document.querySelectorAll(".craft-drop");
   let best = null;
-  let bestDist = 72;
+  let bestRank = Infinity;
   for (const drop of pads) {
     if (drop.disabled || drop.dataset.key === exceptKey) continue;
     const box = drop.getBoundingClientRect();
-    const pad = 24;
-    if (x < box.left - pad || x > box.right + pad || y < box.top - pad || y > box.bottom + pad) continue;
+    const padX = 32;
+    const padY = 28;
+    const left = box.left - padX;
+    const right = box.right + padX;
+    const top = box.top - padY;
+    const bottom = box.bottom + padY;
+    const dx = x < left ? left - x : x > right ? x - right : 0;
+    const dy = y < top ? top - y : y > bottom ? y - bottom : 0;
+    const edgeDist = Math.hypot(dx, dy);
+    if (edgeDist > 40) continue;
     const cx = box.left + box.width / 2;
     const cy = box.top + box.height / 2;
-    const dist = Math.hypot(x - cx, y - cy);
-    if (dist < bestDist) {
-      bestDist = dist;
+    const centerDist = Math.hypot(x - cx, y - cy);
+    const rank = edgeDist * 1000 + centerDist;
+    if (rank < bestRank) {
+      bestRank = rank;
       best = drop;
     }
   }
   return best;
+}
+
+function rocketDropFromDrag(info, clientX, clientY) {
+  const aim = rocketAimPoint(clientX, clientY);
+  if (info.hotKey) {
+    const lit = document.querySelector(`.craft-drop[data-key="${info.hotKey}"]`);
+    if (
+      lit &&
+      !lit.disabled &&
+      (!info.kind || lit.dataset.kind === info.kind) &&
+      lit.dataset.key !== (info.fromKey || "")
+    ) {
+      return lit;
+    }
+  }
+  return rocketDropAt(aim.x, aim.y, info.kind, info.fromKey || "");
 }
 
 function clearRocketSlot(key) {
@@ -1998,6 +2021,7 @@ document.addEventListener("pointerdown", (event) => {
         kind: piece.dataset.kind,
         value: piece.dataset.value,
         fromKey: "",
+        hotKey: "",
         x: event.clientX,
         y: event.clientY,
         moved: false,
@@ -2017,6 +2041,7 @@ document.addEventListener("pointerdown", (event) => {
           kind,
           value: kind === "tone" ? toneChip(raw) : raw,
           fromKey: key,
+          hotKey: "",
           x: event.clientX,
           y: event.clientY,
           moved: false,
@@ -2051,7 +2076,9 @@ document.addEventListener("pointermove", (event) => {
       ghost.style.left = `${event.clientX}px`;
       ghost.style.top = `${event.clientY}px`;
       document.querySelectorAll(".craft-drop.hot").forEach((node) => node.classList.remove("hot"));
-      const drop = rocketDropAt(event.clientX, event.clientY, rocketDrag.kind, rocketDrag.fromKey || "");
+      const aim = rocketAimPoint(event.clientX, event.clientY);
+      const drop = rocketDropAt(aim.x, aim.y, rocketDrag.kind, rocketDrag.fromKey || "");
+      rocketDrag.hotKey = drop?.dataset.key || "";
       if (drop) drop.classList.add("hot");
       event.preventDefault();
     }
@@ -2088,7 +2115,7 @@ document.addEventListener("pointerup", (event) => {
     suppressClick = true;
     window.setTimeout(() => { suppressClick = false; }, 0);
     if (state.view !== "rocket" || state.rocket.anim !== "idle" || state.rocket.lock) return;
-    const drop = rocketDropAt(event.clientX, event.clientY, info.kind, info.fromKey || "");
+    const drop = rocketDropFromDrag(info, event.clientX, event.clientY);
     if (info.fromKey) {
       if (drop) moveRocketFill(info.fromKey, drop.dataset.key);
       return;
