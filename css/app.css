@@ -355,6 +355,18 @@ button:focus-visible, a:focus-visible, summary:focus-visible {
   padding: 12px 16px 28px;
 }
 
+.home-board {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.home-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
 .live {
   position: absolute;
   width: 1px;
@@ -409,6 +421,7 @@ body[data-scene="rocket"] {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 body[data-scene="rocket"] .sky {
@@ -442,7 +455,7 @@ body[data-scene="rocket"] #screen {
   position: relative;
   z-index: 1;
   width: min(980px, 100%);
-  padding: 2px 10px 4px;
+  padding: 2px 10px max(4px, env(safe-area-inset-bottom, 0px));
 }
 
 body[data-scene="rocket"] .credit {
@@ -461,7 +474,7 @@ body[data-scene="rocket"] #screen > .rocket-stage {
   flex-direction: column;
   gap: 6px;
   margin-top: 2px;
-  padding: 6px 8px 8px;
+  padding: 6px 8px max(8px, env(safe-area-inset-bottom, 0px));
   overflow: hidden;
   background: rgba(255, 255, 255, 0.14);
   box-shadow: none;
@@ -489,14 +502,29 @@ body.rocket-liftoff .craft-stack {
   box-shadow: 0 3px 0 rgba(40, 40, 60, 0.12);
 }
 
-.rocket-hint .picture { font-size: 1.35rem; line-height: 1; }
-.rocket-word { font-size: 1.15rem; }
-.rocket-hint .bubble {
-  min-width: 36px;
-  min-height: 36px;
-  width: 36px;
-  padding: 0;
+.rocket-hint .rocket-pic {
+  appearance: none;
+  -webkit-appearance: none;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 2px;
+  border: 0;
+  border-radius: 12px;
+  min-width: 44px;
+  min-height: 44px;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
 }
+
+.rocket-hint .rocket-pic:focus-visible {
+  outline: 3px solid #ffb703;
+  outline-offset: 1px;
+}
+
+.rocket-hint .picture { font-size: 1.55rem; line-height: 1; }
+.rocket-word { font-size: 1.15rem; }
 
 .rocket-play {
   flex: 1 1 auto;
@@ -532,9 +560,10 @@ body.rocket-liftoff .craft-stack {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* 貼近可玩區底部，高螢幕不會漂在半空 */
+  justify-content: flex-end;
   gap: 4px;
-  padding: 4px 48px 40px 28px;
+  padding: 8px 64px max(14px, calc(10px + env(safe-area-inset-bottom, 0px))) 32px;
   box-sizing: border-box;
 }
 
@@ -545,12 +574,12 @@ body.rocket-liftoff .craft-stack {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   flex: 0 1 auto;
   max-height: 100%;
   min-height: 0;
   width: 100%;
-  margin-top: -18px;
+  margin: 0;
   overflow: visible;
 }
 
@@ -565,7 +594,7 @@ body.rocket-liftoff .craft-stack {
 .launch-pad {
   position: relative;
   z-index: 4;
-  width: min(150px, 78%);
+  width: min(180px, 82%);
   margin-top: 2px;
   display: flex;
   flex-direction: column;
@@ -693,7 +722,7 @@ body.rocket-liftoff .craft-stack {
 }
 
 .craft {
-  --craft-w: 72px;
+  --craft-w: 100px;
   --craft-line: #9bb4c9;
   --craft-body-a: #fffaf3;
   --craft-body-b: #e7f3ff;
@@ -709,7 +738,7 @@ body.rocket-liftoff .craft-stack {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: calc(var(--craft-w) + 96px);
+  width: calc(var(--craft-w) + 128px);
   margin: 0 auto;
   filter: drop-shadow(0 5px 8px rgba(40, 60, 90, 0.18));
   will-change: transform;
@@ -742,7 +771,7 @@ body.rocket-liftoff .craft-stack {
 .craft-cone {
   display: block;
   width: 100%;
-  height: 44px;
+  height: 58px;
   background: linear-gradient(180deg, var(--craft-nose-a) 0%, var(--craft-nose-b) 100%);
   border: 2.5px solid #e8927c;
   border-bottom: 0;
@@ -755,9 +784,9 @@ body.rocket-liftoff .craft-stack {
 .craft-window {
   position: absolute;
   left: 50%;
-  top: 12px;
-  width: 22px;
-  height: 22px;
+  top: 16px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   transform: translateX(-50%);
   background:
@@ -779,8 +808,8 @@ body.rocket-liftoff .craft-stack {
 .craft-capsule {
   position: relative;
   z-index: 1;
-  height: 14px;
-  margin: 2px 5px;
+  height: 16px;
+  margin: 3px 6px;
   border-radius: 4px;
   background: linear-gradient(180deg, var(--craft-capsule-a) 0%, var(--craft-capsule-b) 100%);
   box-shadow:
@@ -804,10 +833,10 @@ body.rocket-liftoff .craft-stack {
 .craft-tag {
   position: absolute;
   left: auto;
-  right: calc(100% + 0.35rem);
+  right: calc(100% + 0.4rem);
   top: 50%;
   transform: translateY(-50%);
-  font-size: 0.95rem;
+  font-size: 1.12rem;
   font-weight: 800;
   color: #fff8e8;
   text-shadow: 0 1px 0 rgba(20, 30, 50, 0.45);
@@ -862,97 +891,99 @@ body.rocket-liftoff .craft-stack {
 
 .rocket-stage button.craft-seg {
   width: 100%;
-  min-height: 32px;
+  min-height: 46px;
+  height: auto;
+  flex: 0 0 auto;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(220, 236, 255, 0.55) 100%);
   border: 0;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.8),
     0 1px 0 rgba(155, 180, 201, 0.25);
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 800;
-  border-radius: 3px;
+  border-radius: 4px;
   color: #355066;
 }
 
 .craft[data-letters="1"] .craft-seg,
-.craft[data-letters="2"] .craft-seg { min-height: 34px; font-size: 1.3rem; }
+.craft[data-letters="2"] .craft-seg { min-height: 48px; font-size: 1.55rem; }
 
-.craft[data-letters="3"] .craft-seg { min-height: 30px; font-size: 1.2rem; }
+.craft[data-letters="3"] .craft-seg { min-height: 42px; font-size: 1.4rem; }
 
 .craft[data-letters="4"] .craft-seg,
-.craft[data-letters="5"] .craft-seg { min-height: 22px; font-size: 1.05rem; }
+.craft[data-letters="5"] .craft-seg { min-height: 32px; font-size: 1.25rem; }
 
 .craft[data-letters="4"],
-.craft[data-letters="5"] { --craft-w: 70px; }
+.craft[data-letters="5"] { --craft-w: 94px; }
 
 .craft[data-letters="4"] .craft-cone,
-.craft[data-letters="5"] .craft-cone { height: 36px; }
+.craft[data-letters="5"] .craft-cone { height: 48px; }
 
 .craft[data-letters="4"] .craft-window,
 .craft[data-letters="5"] .craft-window {
-  width: 18px;
-  height: 18px;
-  top: 10px;
+  width: 24px;
+  height: 24px;
+  top: 13px;
 }
 
-.craft[data-letters="6"] .craft-seg { min-height: 18px; font-size: 0.95rem; }
+.craft[data-letters="6"] .craft-seg { min-height: 26px; font-size: 1.12rem; }
 
-.craft[data-letters="6"] { --craft-w: 62px; }
+.craft[data-letters="6"] { --craft-w: 84px; }
 
 .craft[data-letters="7"] .craft-seg,
 .craft[data-letters="8"] .craft-seg,
 .craft[data-letters="9"] .craft-seg,
-.craft[data-letters="10"] .craft-seg { min-height: 15px; font-size: 0.88rem; }
+.craft[data-letters="10"] .craft-seg { min-height: 22px; font-size: 1.05rem; }
 
 .craft[data-letters="7"],
 .craft[data-letters="8"],
 .craft[data-letters="9"],
-.craft[data-letters="10"] { --craft-w: 56px; }
+.craft[data-letters="10"] { --craft-w: 76px; }
 
 .craft[data-letters="6"] .craft-cone,
 .craft[data-letters="7"] .craft-cone,
 .craft[data-letters="8"] .craft-cone,
 .craft[data-letters="9"] .craft-cone,
-.craft[data-letters="10"] .craft-cone { height: 30px; }
+.craft[data-letters="10"] .craft-cone { height: 40px; }
 
 .craft[data-letters="6"] .craft-window,
 .craft[data-letters="7"] .craft-window,
 .craft[data-letters="8"] .craft-window,
 .craft[data-letters="9"] .craft-window,
 .craft[data-letters="10"] .craft-window {
-  width: 14px;
-  height: 14px;
-  top: 8px;
+  width: 18px;
+  height: 18px;
+  top: 10px;
 }
 
 .craft[data-letters="4"] .craft-capsule,
-.craft[data-letters="5"] .craft-capsule { height: 9px; margin: 1px 4px; }
+.craft[data-letters="5"] .craft-capsule { height: 12px; margin: 2px 5px; }
 
 .craft[data-letters="6"] .craft-capsule,
 .craft[data-letters="7"] .craft-capsule,
 .craft[data-letters="8"] .craft-capsule,
 .craft[data-letters="9"] .craft-capsule,
-.craft[data-letters="10"] .craft-capsule { height: 7px; margin: 0 3px; }
+.craft[data-letters="10"] .craft-capsule { height: 9px; margin: 1px 4px; }
 
 .craft[data-letters="4"] .craft-thruster-band,
 .craft[data-letters="5"] .craft-thruster-band,
 .craft[data-letters="6"] .craft-thruster-band,
 .craft[data-letters="7"] .craft-thruster-band,
-.craft[data-letters="8"] .craft-thruster-band { height: 8px; }
+.craft[data-letters="8"] .craft-thruster-band { height: 10px; }
 
 .craft[data-letters="4"] .craft-nozzle,
 .craft[data-letters="5"] .craft-nozzle,
 .craft[data-letters="6"] .craft-nozzle,
 .craft[data-letters="7"] .craft-nozzle,
-.craft[data-letters="8"] .craft-nozzle { height: 8px; }
+.craft[data-letters="8"] .craft-nozzle { height: 10px; }
 
 .craft[data-letters="4"] .fin,
 .craft[data-letters="5"] .fin,
 .craft[data-letters="6"] .fin,
 .craft[data-letters="7"] .fin,
 .craft[data-letters="8"] .fin {
-  width: 18px;
-  height: 20px;
+  width: 24px;
+  height: 26px;
 }
 
 .craft-bay.lit .craft-seg {
@@ -963,19 +994,19 @@ body.rocket-liftoff .craft-stack {
 
 .rocket-stage button.craft-wing {
   position: absolute;
-  right: -48px;
+  right: -60px;
   top: 50%;
   transform: translateY(-50%);
-  width: 44px;
-  min-width: 44px;
-  min-height: 34px;
+  width: 60px;
+  min-width: 60px;
+  min-height: 50px;
   height: auto;
-  border-radius: 6px 4px 8px 4px;
+  border-radius: 8px 5px 10px 5px;
   background: linear-gradient(145deg, var(--craft-wing-a), var(--craft-wing-b));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.55),
     0 2px 0 rgba(90, 150, 80, 0.18);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 800;
   color: #355066;
   z-index: 2;
@@ -987,10 +1018,10 @@ body.rocket-liftoff .craft-stack {
   top: auto;
   left: auto;
   transform: none;
-  width: calc(100% - 6px);
-  min-height: 26px;
-  margin: 2px 3px;
-  border-radius: 3px;
+  width: calc(100% - 8px);
+  min-height: 34px;
+  margin: 3px 4px;
+  border-radius: 4px;
 }
 
 .craft-bay.is-light .craft-tag {
@@ -1029,6 +1060,10 @@ body.rocket-liftoff .craft-stack {
   border-radius: 6px 4px 8px 4px;
 }
 
+.rocket-stage button.craft-drop.is-lifted strong {
+  opacity: 0.18;
+}
+
 .rocket-stage button.craft-drop.active,
 .rocket-stage button.craft-drop.hot {
   outline: 3px solid #ffb703;
@@ -1047,28 +1082,15 @@ body.rocket-liftoff .craft-stack {
   box-shadow: inset 0 0 0 2px #7bc85a;
 }
 
-.rocket-stage button.craft-seg.snap {
-  animation: craft-snap 0.28s ease;
+/* 只用淡入提示，避免 scale 造成格子晃動難對準 */
+.rocket-stage button.craft-seg.snap,
+.rocket-stage button.craft-wing.snap {
+  animation: craft-snap-soft 0.22s ease;
 }
 
-@keyframes craft-snap {
-  0% { transform: scale(0.86); }
-  55% { transform: scale(1.08); }
-  100% { transform: scale(1); }
-}
-
-.craft-wing.snap:not(.light) {
-  animation: craft-wing-snap 0.28s ease;
-}
-
-.craft-wing.light.snap {
-  animation: craft-snap 0.28s ease;
-}
-
-@keyframes craft-wing-snap {
-  0% { transform: translateY(-50%) scale(0.86); }
-  55% { transform: translateY(-50%) scale(1.08); }
-  100% { transform: translateY(-50%) scale(1); }
+@keyframes craft-snap-soft {
+  0% { filter: brightness(1.15); }
+  100% { filter: none; }
 }
 
 .craft-tail {
@@ -1087,8 +1109,8 @@ body.rocket-liftoff .craft-stack {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 8px;
-  height: 26px;
+  bottom: 10px;
+  height: 34px;
   pointer-events: none;
   z-index: 0;
 }
@@ -1096,21 +1118,21 @@ body.rocket-liftoff .craft-stack {
 .fin {
   position: absolute;
   bottom: 0;
-  width: 26px;
-  height: 30px;
+  width: 34px;
+  height: 38px;
   background: linear-gradient(160deg, #ffe89a 0%, #ffd56a 100%);
   border: 2px solid #e8b84a;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 .fin.left {
-  left: -16px;
+  left: -20px;
   border-radius: 6px 3px 10px 12px;
   transform: rotate(-8deg);
 }
 
 .fin.right {
-  right: -16px;
+  right: -20px;
   border-radius: 3px 6px 12px 10px;
   transform: rotate(8deg);
 }
@@ -1130,7 +1152,7 @@ body.rocket-liftoff .craft-stack {
 .craft-thruster-band {
   display: block;
   width: 100%;
-  height: 12px;
+  height: 14px;
   border-radius: 5px 5px 4px 4px;
   background: linear-gradient(180deg, var(--craft-thrust-a) 0%, var(--craft-thrust-b) 100%);
   box-shadow:
@@ -1141,7 +1163,7 @@ body.rocket-liftoff .craft-stack {
 .craft-nozzle {
   display: block;
   width: 52%;
-  height: 12px;
+  height: 14px;
   border-radius: 2px 2px 7px 7px;
   background: linear-gradient(180deg, #9aafc2 0%, #6f879c 100%);
   box-shadow:
@@ -1517,6 +1539,19 @@ body.rocket-dragging {
   overflow: hidden;
   touch-action: none;
   user-select: none;
+  -webkit-user-select: none;
+}
+
+body.rocket-dragging .rocket-banks,
+body.rocket-dragging .craft-wrap,
+body.rocket-dragging .rocket-play {
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
+body.rocket-dragging .rocket-banks {
+  overflow: hidden;
+  pointer-events: none;
 }
 
 body.rocket-dragging #ghost {
@@ -1531,6 +1566,10 @@ body.rocket-dragging #ghost {
   font-weight: 800;
   background: #ffffff;
   box-shadow: 0 6px 0 rgba(40, 40, 60, 0.18);
+  /* 浮在手指上方，方便看準空格 */
+  transform: translate(-50%, -130%);
+  pointer-events: none;
+  z-index: 20;
 }
 
 #ghost[hidden] {
@@ -1559,20 +1598,25 @@ body[data-scene="rocket"] .go-btn {
     gap: 6px;
   }
   .rocket-banks { padding: 6px 8px 14px; }
-  .craft { --craft-w: 68px; }
-  .craft-wrap { padding-left: 24px; padding-right: 44px; }
+  .craft { --craft-w: 92px; }
+  .craft-wrap { padding-left: 28px; padding-right: 68px; }
   .craft[data-letters="1"],
-  .craft[data-letters="2"] { --craft-w: 68px; }
+  .craft[data-letters="2"] { --craft-w: 92px; }
   .craft[data-letters="4"],
-  .craft[data-letters="5"] { --craft-w: 60px; }
-  .craft[data-letters="6"] { --craft-w: 54px; }
+  .craft[data-letters="5"] { --craft-w: 84px; }
+  .craft[data-letters="6"] { --craft-w: 76px; }
   .craft[data-letters="7"],
-  .craft[data-letters="8"] { --craft-w: 50px; }
+  .craft[data-letters="8"] { --craft-w: 70px; }
   .rocket-stage button.craft-wing {
-    right: -38px;
-    width: 32px;
-    min-width: 32px;
-    min-height: 26px;
+    right: -56px;
+    width: 56px;
+    min-width: 56px;
+    min-height: 46px;
+    font-size: 1.3rem;
+  }
+  .rocket-stage button.craft-seg {
+    min-height: 42px;
+    font-size: 1.4rem;
   }
   .rocket-stage .rocket-parts .choice,
   .rocket-stage .rocket-tones .tone {
@@ -1586,16 +1630,16 @@ body[data-scene="rocket"] .go-btn {
 }
 
 @media (max-height: 740px) {
-  .craft { --craft-w: 64px; }
-  .craft-cone { height: 38px; }
-  .rocket-stage button.craft-seg { min-height: 28px; font-size: 1.1rem; }
+  .craft { --craft-w: 86px; }
+  .craft-cone { height: 48px; }
+  .rocket-stage button.craft-seg { min-height: 36px; font-size: 1.28rem; }
   .craft[data-letters="1"] .craft-seg,
-  .craft[data-letters="2"] .craft-seg { min-height: 30px; font-size: 1.15rem; }
+  .craft[data-letters="2"] .craft-seg { min-height: 40px; font-size: 1.35rem; }
   .craft[data-letters="4"] .craft-seg,
-  .craft[data-letters="5"] .craft-seg { min-height: 20px; font-size: 1rem; }
-  .craft[data-letters="6"] .craft-seg { min-height: 17px; font-size: 0.92rem; }
+  .craft[data-letters="5"] .craft-seg { min-height: 28px; font-size: 1.15rem; }
+  .craft[data-letters="6"] .craft-seg { min-height: 24px; font-size: 1.05rem; }
   .craft[data-letters="7"] .craft-seg,
-  .craft[data-letters="8"] .craft-seg { min-height: 15px; font-size: 0.86rem; }
+  .craft[data-letters="8"] .craft-seg { min-height: 20px; font-size: 1rem; }
   .rocket-hint { min-height: 30px; }
   .rocket-hint .picture { font-size: 1.15rem; }
   .rocket-word { font-size: 1rem; }
@@ -1613,10 +1657,17 @@ body[data-scene="rocket"] .go-btn {
 }
 
 @media (max-height: 640px) {
-  .craft { --craft-w: 58px; }
-  .craft-cone { height: 32px; }
-  .craft-capsule { height: 7px; }
+  .craft { --craft-w: 78px; }
+  .craft-cone { height: 42px; }
+  .craft-capsule { height: 10px; }
   .rocket-banks { gap: 6px; }
+  .rocket-stage button.craft-seg { min-height: 30px; font-size: 1.18rem; }
+  .rocket-stage button.craft-wing {
+    right: -50px;
+    width: 50px;
+    min-width: 50px;
+    min-height: 40px;
+  }
   .rocket-stage .choices.rocket-parts,
   .rocket-stage .tones.rocket-tones { gap: 5px; }
   .rocket-stage .rocket-parts .choice,
@@ -2204,8 +2255,243 @@ body::after {
   50% { opacity: 1; }
 }
 
-@media (min-width: 800px) {
-  .gates { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+/* —— 桌面兩用：撐滿視窗，不再縮成中間一小塊 —— */
+@media (min-width: 860px) {
+  :root { font-size: 21px; }
+
+  body[data-scene="home"] {
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  body[data-scene="home"] .top {
+    flex: 0 0 auto;
+  }
+
+  body[data-scene="home"] #screen {
+    flex: 1 1 0;
+    width: min(1280px, 94vw);
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 12px 28px 8px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  body[data-scene="home"] .home-board {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 0;
+    height: 100%;
+  }
+
+  body[data-scene="home"] .hello {
+    flex: 0 0 auto;
+    margin: 0;
+  }
+
+  body[data-scene="home"] .hello .parade {
+    flex: 0 1 240px;
+    max-width: 280px;
+  }
+
+  body[data-scene="home"] .home-main {
+    flex: 1 1 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.95fr);
+    gap: 20px;
+    align-items: stretch;
+    min-height: 0;
+  }
+
+  body[data-scene="home"] .gates {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    height: 100%;
+    min-height: 0;
+  }
+
+  body[data-scene="home"] .gate {
+    height: 100%;
+    min-height: 0;
+    padding: 16px 16px;
+  }
+
+  body[data-scene="home"] .gate span { font-size: clamp(2.4rem, 3.5vw, 3.2rem); }
+  body[data-scene="home"] .gate strong { font-size: clamp(1.25rem, 1.6vw, 1.5rem); }
+  body[data-scene="home"] .gate small { font-size: 0.95rem; }
+
+  body[data-scene="home"] .machine {
+    margin: 0;
+    max-width: none;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  body[data-scene="home"] .roster {
+    flex: 0 0 auto;
+    margin: 0;
+    max-width: none;
+  }
+
+  body[data-scene="home"] .roster h2 {
+    margin: 0 0 6px;
+    font-size: 1.1rem;
+  }
+
+  body[data-scene="home"] .avatars {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  body[data-scene="home"] .avatar {
+    min-height: 64px;
+    min-width: 0;
+    padding: 4px 2px 6px;
+  }
+
+  body[data-scene="home"] .avatar .mark {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.75rem;
+  }
+
+  body[data-scene="home"] .avatar .mark.shiro {
+    width: 2.1rem;
+    height: 1.9rem;
+    font-size: 1.85rem;
+  }
+
+  body[data-scene="home"] .avatar-name {
+    font-size: 0.72rem;
+  }
+
+  body[data-scene="home"] .credit {
+    flex: 0 0 auto;
+    margin: 4px 16px 12px;
+  }
+
+  body[data-scene="home"] .hello h2 {
+    font-size: clamp(1.6rem, 2.2vw, 2.2rem);
+  }
+
+  /* 遊戲關卡 */
+  body:not([data-scene="home"]):not([data-scene="rocket"]) #screen {
+    width: min(1100px, 94vw);
+    padding: 16px 24px 36px;
+  }
+
+  .stage {
+    margin-top: 12px;
+    padding: 24px 28px 28px;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .choices { gap: 14px; }
+
+  .choice, .slot, .tone {
+    min-width: 88px;
+    min-height: 88px;
+  }
+
+  .symbol {
+    width: min(100%, 320px);
+    min-height: 188px;
+  }
+
+  /* 火箭 */
+  body[data-scene="rocket"] #screen {
+    width: min(1200px, 96vw);
+    margin: 0 auto;
+  }
+
+  .rocket-play {
+    grid-template-columns: minmax(150px, 0.95fr) minmax(0, 2.05fr);
+    gap: 14px;
+  }
+
+  .rocket-banks { padding: 10px 12px 18px; }
+
+  .rocket-stage .rocket-parts .choice,
+  .rocket-stage .rocket-tones .tone {
+    width: 54px;
+    height: 54px;
+    max-width: 54px;
+    min-width: 54px;
+    min-height: 54px;
+    font-size: 1.28rem;
+  }
+
+  .craft { --craft-w: 112px; }
+  .craft-wrap {
+    padding-left: 44px;
+    padding-right: 72px;
+    padding-bottom: max(18px, calc(12px + env(safe-area-inset-bottom, 0px)));
+  }
+
+  .launch-pad { width: min(200px, 72%); }
+}
+
+@media (min-width: 1200px) {
+  :root { font-size: 22px; }
+
+  body[data-scene="home"] #screen {
+    width: min(1360px, 92vw);
+    padding: 14px 32px 10px;
+  }
+
+  body[data-scene="home"] .home-main {
+    grid-template-columns: minmax(0, 1.7fr) minmax(300px, 0.9fr);
+    gap: 24px;
+  }
+
+  body[data-scene="home"] .gates { gap: 16px; }
+
+  body[data-scene="home"] .gacha-btn {
+    width: 148px;
+    height: 148px;
+    min-width: 148px;
+    min-height: 148px;
+    font-size: 3.8rem;
+  }
+
+  body[data-scene="home"] .avatar { min-height: 92px; }
+
+  body[data-scene="rocket"] #screen {
+    width: min(1280px, 94vw);
+  }
+
+  .rocket-play {
+    grid-template-columns: minmax(168px, 1fr) minmax(0, 2.2fr);
+  }
+
+  .rocket-stage .rocket-parts .choice,
+  .rocket-stage .rocket-tones .tone {
+    width: 58px;
+    height: 58px;
+    max-width: 58px;
+    min-width: 58px;
+    min-height: 58px;
+    font-size: 1.35rem;
+  }
+
+  .craft { --craft-w: 120px; }
 }
 
 @media (max-width: 700px) {

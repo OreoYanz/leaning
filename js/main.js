@@ -160,6 +160,92 @@ function clearRocketDrag() {
     ghost.style.top = "";
   }
   document.querySelectorAll(".craft-drop.hot").forEach((node) => node.classList.remove("hot"));
+  document.querySelectorAll(".craft-drop.is-lifted").forEach((node) => node.classList.remove("is-lifted"));
+}
+
+function rocketDropAt(x, y, kind, exceptKey = "") {
+  const direct = document.elementFromPoint(x, y)?.closest(".craft-drop");
+  if (
+    direct &&
+    (!kind || direct.dataset.kind === kind) &&
+    !direct.disabled &&
+    direct.dataset.key !== exceptKey
+  ) {
+    return direct;
+  }
+  const pads = kind
+    ? document.querySelectorAll(`.craft-drop[data-kind="${kind}"]`)
+    : document.querySelectorAll(".craft-drop");
+  let best = null;
+  let bestDist = 72;
+  for (const drop of pads) {
+    if (drop.disabled || drop.dataset.key === exceptKey) continue;
+    const box = drop.getBoundingClientRect();
+    const pad = 24;
+    if (x < box.left - pad || x > box.right + pad || y < box.top - pad || y > box.bottom + pad) continue;
+    const cx = box.left + box.width / 2;
+    const cy = box.top + box.height / 2;
+    const dist = Math.hypot(x - cx, y - cy);
+    if (dist < bestDist) {
+      bestDist = dist;
+      best = drop;
+    }
+  }
+  return best;
+}
+
+function clearRocketSlot(key) {
+  const round = state.rocket;
+  if (round.lock || round.anim !== "idle") return false;
+  if (round.fills[key] === null || round.fills[key] === undefined) return false;
+  delete round.fills[key];
+  round.missKeys = round.missKeys.filter((item) => item !== key);
+  round.activeSlot = null;
+  round.activePick = null;
+  round.snapKey = "";
+  round.message = "已拿掉，再放一次";
+  return true;
+}
+
+function rocketFillGhostText(kind, value) {
+  if (kind === "tone") return value === "" ? "" : value;
+  return value || "";
+}
+
+function moveRocketFill(fromKey, toKey) {
+  const round = state.rocket;
+  if (round.lock || !round.rocket || round.anim !== "idle") return false;
+  if (!fromKey || !toKey || fromKey === toKey) return false;
+  const slots = rocketSlots(round.rocket);
+  const fromSlot = slots.find((item) => item.key === fromKey);
+  const toSlot = slots.find((item) => item.key === toKey);
+  if (!fromSlot || !toSlot || fromSlot.kind !== toSlot.kind) return false;
+  const fromVal = round.fills[fromKey];
+  if (fromVal === null || fromVal === undefined) return false;
+  const toVal = round.fills[toKey];
+  const targetEmpty = toVal === null || toVal === undefined;
+  if (targetEmpty) {
+    delete round.fills[fromKey];
+    round.fills[toKey] = fromVal;
+    round.message = "搬過去了";
+  } else {
+    round.fills[fromKey] = toVal;
+    round.fills[toKey] = fromVal;
+    round.message = "交換好了";
+  }
+  round.activeSlot = null;
+  round.activePick = null;
+  round.missKeys = round.missKeys.filter((item) => item !== fromKey && item !== toKey);
+  round.snapKey = toKey;
+  render();
+  window.setTimeout(() => {
+    if (state.rocket.snapKey === toKey) {
+      state.rocket.snapKey = "";
+      document.querySelector(`.craft-drop[data-key="${toKey}"]`)?.classList.remove("snap");
+    }
+  }, 220);
+  if (rocketReady()) confirmRocket();
+  return true;
 }
 
 function rocketAnimLive(token) {
@@ -374,32 +460,36 @@ function homeHtml() {
   const coins = progress.get().coins || 0;
   const names = ownedAvatars().map((avatar) => avatar.name);
   return `
-    <section class="hello">
-      ${mascot("hello-face")}
-      <div>
-        <h2>哈囉！今天想玩什麼？</h2>
-        <p class="whisper coin-line" aria-label="金幣 ${coins} 個${names.length ? `，夥伴 ${esc(names.join("、"))} 在跑` : ""}">${coinTag()} <span class="coin-count">${coins}</span>${paradeHtml(names)}</p>
+    <div class="home-board">
+      <section class="hello">
+        ${mascot("hello-face")}
+        <div>
+          <h2>哈囉！今天想玩什麼？</h2>
+          <p class="whisper coin-line" aria-label="金幣 ${coins} 個${names.length ? `，夥伴 ${esc(names.join("、"))} 在跑` : ""}">${coinTag()} <span class="coin-count">${coins}</span>${paradeHtml(names)}</p>
+        </div>
+      </section>
+      <div class="home-main">
+        <div class="gates">
+          <button type="button" class="gate pink" data-act="go" data-view="learn" aria-label="注音認識，看看注音"><span aria-hidden="true">📒</span><strong>注音認識</strong><small>看看注音</small></button>
+          <button type="button" class="gate yellow" data-act="go" data-view="listen" aria-label="聽音找注音，聽一聽再點"><span aria-hidden="true">👂</span><strong>聽音找注音</strong><small>聽一聽再點</small></button>
+          <button type="button" class="gate blue" data-act="go" data-view="boss" aria-label="拼音大魔王，把字拼起來"><span aria-hidden="true">🐲</span><strong>拼音大魔王</strong><small>把字拼起來</small></button>
+          <button type="button" class="gate green" data-act="go" data-view="rocket" aria-label="拼音火箭，直式拼注音"><span aria-hidden="true">🚀</span><strong>拼音火箭</strong><small>直式拼注音</small></button>
+        </div>
+        ${machineHtml()}
       </div>
-    </section>
-    <div class="gates">
-      <button type="button" class="gate pink" data-act="go" data-view="learn" aria-label="注音認識，看看注音"><span aria-hidden="true">📒</span><strong>注音認識</strong><small>看看注音</small></button>
-      <button type="button" class="gate yellow" data-act="go" data-view="listen" aria-label="聽音找注音，聽一聽再點"><span aria-hidden="true">👂</span><strong>聽音找注音</strong><small>聽一聽再點</small></button>
-      <button type="button" class="gate blue" data-act="go" data-view="boss" aria-label="拼音大魔王，把字拼起來"><span aria-hidden="true">🐲</span><strong>拼音大魔王</strong><small>把字拼起來</small></button>
-      <button type="button" class="gate green" data-act="go" data-view="rocket" aria-label="拼音火箭，直式拼注音"><span aria-hidden="true">🚀</span><strong>拼音火箭</strong><small>直式拼注音</small></button>
+      <section class="roster" aria-label="選擇夥伴">
+        <h2>選一個夥伴</h2>
+        <div class="avatars">
+          ${AVATARS.map((avatar) => {
+            if (!avatarUnlocked(avatar.id)) {
+              return `<button type="button" class="avatar locked" data-act="locked-avatar" aria-label="還沒解鎖"><span class="mark secret" aria-hidden="true">?</span></button>`;
+            }
+            const on = avatar.id === currentAvatar().id;
+            return `<button type="button" class="avatar${on ? " on" : ""}" data-act="avatar" data-id="${esc(avatar.id)}" aria-pressed="${on}" aria-label="${on ? "已選擇" : "選擇"} ${esc(avatar.name)}">${avatarMark(avatar)}<span class="avatar-name">${esc(avatar.name)}</span></button>`;
+          }).join("")}
+        </div>
+      </section>
     </div>
-    ${machineHtml()}
-    <section class="roster" aria-label="選擇夥伴">
-      <h2>選一個夥伴</h2>
-      <div class="avatars">
-        ${AVATARS.map((avatar) => {
-          if (!avatarUnlocked(avatar.id)) {
-            return `<button type="button" class="avatar locked" data-act="locked-avatar" aria-label="還沒解鎖"><span class="mark secret" aria-hidden="true">?</span></button>`;
-          }
-          const on = avatar.id === currentAvatar().id;
-          return `<button type="button" class="avatar${on ? " on" : ""}" data-act="avatar" data-id="${esc(avatar.id)}" aria-pressed="${on}" aria-label="${on ? "已選擇" : "選擇"} ${esc(avatar.name)}">${avatarMark(avatar)}<span class="avatar-name">${esc(avatar.name)}</span></button>`;
-        }).join("")}
-      </div>
-    </section>
   `;
 }
 
@@ -758,9 +848,10 @@ function rocketHtml() {
   return `
     <section class="stage rocket-stage anim-${esc(anim)}">
       <div class="rocket-hint">
-        <span class="picture" aria-hidden="true">${esc(emojiOf(rocket.image))}</span>
+        <button type="button" class="rocket-pic" data-act="rocket-replay" aria-label="重聽 ${esc(rocket.word)}">
+          <span class="picture" aria-hidden="true">${esc(emojiOf(rocket.image))}</span>
+        </button>
         <strong class="rocket-word">${esc(rocket.word)}</strong>
-        <button type="button" class="bubble" data-act="rocket-replay" aria-label="重聽 ${esc(rocket.word)}">🔊</button>
       </div>
       <div class="rocket-play">
         <div class="rocket-banks">
@@ -828,7 +919,7 @@ function rocketHtml() {
           </div>
         </div>
       </div>
-      <p class="say-hi">${anim === "liftoff" || anim === "ignite" ? "發射！" : anim === "countdown" ? "準備發射" : anim === "success" ? "組裝完成！" : `${mascot()} ${esc(round.message || "拖到火箭上，或先點零件再點空格")}`}</p>
+      <p class="say-hi">${anim === "liftoff" || anim === "ignite" ? "發射！" : anim === "countdown" ? "準備發射" : anim === "success" ? "組裝完成！" : `${mascot()} ${esc(round.message || "拖到空格，或先點零件再點空格；點錯的可拿掉")}`}</p>
     </section>
   `;
 }
@@ -1210,7 +1301,7 @@ function prepareRocket(speakWord) {
   round.countdown = 0;
   round.missKeys = [];
   round.faulted = false;
-  round.message = "拖到火箭上，或先點零件再點空格";
+  round.message = "拖到格子；格子之間可互拖；點一下拿掉";
   if (speakWord && item) audio.play("word", item.id, item.word);
 }
 
@@ -1231,12 +1322,16 @@ function setRocketFill(key, raw) {
   round.activeSlot = null;
   round.activePick = null;
   round.missKeys = round.missKeys.filter((item) => item !== key);
-  round.message = "拖到火箭上，或先點零件再點空格";
+  round.message = "拖到格子；格子之間可互拖；點一下拿掉";
   round.snapKey = key;
   render();
   window.setTimeout(() => {
-    if (state.rocket.snapKey === key) state.rocket.snapKey = "";
-  }, 280);
+    if (state.rocket.snapKey === key) {
+      state.rocket.snapKey = "";
+      const node = document.querySelector(`.craft-drop[data-key="${key}"]`);
+      node?.classList.remove("snap");
+    }
+  }, 220);
   if (rocketReady()) confirmRocket();
   return true;
 }
@@ -1807,17 +1902,15 @@ function onClick(event) {
       setRocketFill(key, kind === "tone" ? toneChip(round.activePick.value) : round.activePick.value);
       return;
     }
-    if (round.activeSlot === key && filled) {
-      delete round.fills[key];
-      round.missKeys = round.missKeys.filter((item) => item !== key);
-      round.activeSlot = key;
-      round.message = "再放一個零件";
+    if (filled) {
+      clearRocketSlot(key);
+      say("已拿掉");
       render();
       return;
     }
     round.activeSlot = round.activeSlot === key ? null : key;
     round.activePick = null;
-    round.message = round.activeSlot ? "再選下面的零件" : "拖到火箭上，或先點零件再點空格";
+    round.message = round.activeSlot ? "再選左邊的零件" : "拖到格子；格子之間可互拖；點一下拿掉";
     render();
   }
   if (act === "rocket-pick") {
@@ -1840,7 +1933,7 @@ function onClick(event) {
     }
     if (round.activePick?.kind === kind && round.activePick.value === value) round.activePick = null;
     else round.activePick = { kind, value };
-    round.message = round.activePick ? "再點火箭上的空格" : "拖到火箭上，或先點零件再點空格";
+    round.message = round.activePick ? "再點火箭上的空格" : "拖到格子；格子之間可互拖；點一下拿掉";
     render();
   }
   if (act === "rocket-practice") {
@@ -1904,6 +1997,7 @@ document.addEventListener("pointerdown", (event) => {
       rocketDrag = {
         kind: piece.dataset.kind,
         value: piece.dataset.value,
+        fromKey: "",
         x: event.clientX,
         y: event.clientY,
         moved: false,
@@ -1912,6 +2006,26 @@ document.addEventListener("pointerdown", (event) => {
       };
       try { piece.setPointerCapture(event.pointerId); } catch (error) { /* ignore */ }
       return;
+    }
+    const filledDrop = event.target.closest(".craft-drop.filled");
+    if (filledDrop && !filledDrop.disabled) {
+      const key = filledDrop.dataset.key;
+      const kind = filledDrop.dataset.kind;
+      const raw = state.rocket.fills[key];
+      if (raw !== null && raw !== undefined) {
+        rocketDrag = {
+          kind,
+          value: kind === "tone" ? toneChip(raw) : raw,
+          fromKey: key,
+          x: event.clientX,
+          y: event.clientY,
+          moved: false,
+          pointer: event.pointerId,
+          text: rocketFillGhostText(kind, raw)
+        };
+        try { filledDrop.setPointerCapture(event.pointerId); } catch (error) { /* ignore */ }
+        return;
+      }
     }
   }
   const card = event.target.closest("[data-card]");
@@ -1924,18 +2038,21 @@ document.addEventListener("pointerdown", (event) => {
 
 document.addEventListener("pointermove", (event) => {
   if (rocketDrag && event.pointerId === rocketDrag.pointer) {
-    if (Math.hypot(event.clientX - rocketDrag.x, event.clientY - rocketDrag.y) > 10) {
+    const dist = Math.hypot(event.clientX - rocketDrag.x, event.clientY - rocketDrag.y);
+    if (dist > 6) {
       rocketDrag.moved = true;
       document.body.classList.add("rocket-dragging");
+      if (rocketDrag.fromKey) {
+        document.querySelector(`.craft-drop[data-key="${rocketDrag.fromKey}"]`)?.classList.add("is-lifted");
+      }
       const ghost = document.querySelector("#ghost");
       ghost.hidden = false;
       ghost.textContent = rocketDrag.text;
       ghost.style.left = `${event.clientX}px`;
       ghost.style.top = `${event.clientY}px`;
       document.querySelectorAll(".craft-drop.hot").forEach((node) => node.classList.remove("hot"));
-      const under = document.elementFromPoint(event.clientX, event.clientY);
-      const drop = under?.closest(".craft-drop");
-      if (drop && drop.dataset.kind === rocketDrag.kind) drop.classList.add("hot");
+      const drop = rocketDropAt(event.clientX, event.clientY, rocketDrag.kind, rocketDrag.fromKey || "");
+      if (drop) drop.classList.add("hot");
       event.preventDefault();
     }
     return;
@@ -1971,12 +2088,15 @@ document.addEventListener("pointerup", (event) => {
     suppressClick = true;
     window.setTimeout(() => { suppressClick = false; }, 0);
     if (state.view !== "rocket" || state.rocket.anim !== "idle" || state.rocket.lock) return;
-    const under = document.elementFromPoint(event.clientX, event.clientY);
-    const drop = under?.closest(".craft-drop");
-    if (drop && drop.dataset.kind === info.kind) {
+    const drop = rocketDropAt(event.clientX, event.clientY, info.kind, info.fromKey || "");
+    if (info.fromKey) {
+      if (drop) moveRocketFill(info.fromKey, drop.dataset.key);
+      return;
+    }
+    if (drop) {
       setRocketFill(drop.dataset.key, info.value);
     } else {
-      state.rocket.message = "放回零件區，再拖一次";
+      state.rocket.message = "靠近格子再放；格子可互拖，點一下拿掉";
       render();
     }
     return;
