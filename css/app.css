@@ -564,8 +564,8 @@ body.rocket-liftoff .craft-stack {
   /* 貼近可玩區底部，高螢幕不會漂在半空 */
   justify-content: flex-end;
   gap: 4px;
-  /* 左右對稱，火箭本體與發射台才不會看起來歪 */
-  padding: 8px 56px max(14px, calc(10px + env(safe-area-inset-bottom, 0px)));
+  /* 左右同寬，留給側標與翅膀，本體仍置中 */
+  padding: 8px 72px max(14px, calc(10px + env(safe-area-inset-bottom, 0px)));
   box-sizing: border-box;
 }
 
@@ -588,7 +588,19 @@ body.rocket-liftoff .craft-stack {
   flex: 0 1 auto;
   max-height: 100%;
   min-height: 0;
-  width: fit-content;
+  width: 100%;
+  margin: 0;
+  overflow: visible;
+}
+
+/* 本體與發射台同一欄寬，翅膀／側標溢出也不影響對齊 */
+.craft-column {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: var(--craft-w);
   max-width: 100%;
   margin: 0 auto;
   overflow: visible;
@@ -600,16 +612,17 @@ body.rocket-liftoff .craft-stack {
   flex: 0 1 auto;
   min-height: 0;
   max-height: calc(100% - var(--pad-space));
+  width: 100%;
+  transform: none;
 }
 
 .launch-pad {
   position: relative;
   z-index: 4;
-  /* 對齊火箭本體寬度，不要跟整段（含翅膀）一起置中錯位 */
-  width: calc(var(--craft-w) + 18px);
-  max-width: 100%;
-  margin-top: 2px;
-  margin-inline: auto;
+  width: calc(100% + 16px);
+  max-width: none;
+  margin-top: 0;
+  margin-inline: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -617,6 +630,7 @@ body.rocket-liftoff .craft-stack {
   flex: 0 0 auto;
   height: var(--pad-space);
   box-sizing: border-box;
+  transform: none;
 }
 
 .pad-plumes {
@@ -724,7 +738,7 @@ body.rocket-liftoff .craft-stack {
 }
 
 .pad-floor {
-  width: 122%;
+  width: 100%;
   height: 10px;
   margin-top: -2px;
   border-radius: 999px;
@@ -750,17 +764,21 @@ body.rocket-liftoff .craft-stack {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: calc(var(--craft-w) + 128px);
-  margin: 0 auto;
+  align-items: stretch;
+  width: 100%;
+  margin: 0;
   filter: drop-shadow(0 5px 8px rgba(40, 60, 90, 0.18));
-  will-change: transform;
+  overflow: visible;
+}
+
+.craft-idle {
+  transform: none !important;
 }
 
 .craft-spine {
   position: relative;
   z-index: 2;
-  width: var(--craft-w);
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -777,7 +795,7 @@ body.rocket-liftoff .craft-stack {
 .craft-nose {
   position: relative;
   z-index: 3;
-  width: var(--craft-w);
+  width: 100%;
   margin: 0 auto -1px;
 }
 
@@ -1129,15 +1147,15 @@ body.rocket-liftoff .craft-stack {
 }
 
 .fin.left {
-  left: -20px;
-  border-radius: 6px 3px 10px 12px;
-  transform: rotate(-8deg);
+  left: -18px;
+  border-radius: 8px 2px 14px 4px;
+  transform: none;
 }
 
 .fin.right {
-  right: -20px;
-  border-radius: 3px 6px 12px 10px;
-  transform: rotate(8deg);
+  right: -18px;
+  border-radius: 2px 8px 4px 14px;
+  transform: none;
 }
 
 .craft-thruster {
@@ -1607,8 +1625,8 @@ body[data-scene="rocket"] .go-btn {
   .rocket-banks { padding: 6px 8px 14px; }
   .craft-wrap {
     --craft-w: 92px;
-    padding-left: 48px;
-    padding-right: 48px;
+    padding-left: 68px;
+    padding-right: 68px;
   }
   .craft-wrap[data-letters="1"],
   .craft-wrap[data-letters="2"] { --craft-w: 92px; }
@@ -2428,8 +2446,8 @@ body::after {
 
   .craft-wrap {
     --craft-w: 112px;
-    padding-left: 56px;
-    padding-right: 56px;
+    padding-left: 72px;
+    padding-right: 72px;
     padding-bottom: max(18px, calc(12px + env(safe-area-inset-bottom, 0px)));
   }
 

@@ -902,42 +902,44 @@ function rocketHtml() {
           ${anim === "countdown" ? `<p class="rocket-count" aria-live="assertive">${round.countdown}</p>` : ""}
           ${anim === "success" ? `<p class="rocket-banner">組裝完成！</p>` : ""}
           <div class="craft-stack">
-            <div class="craft craft-${esc(anim)}" data-letters="${letterCount}" aria-label="拼音火箭 ${esc(rocket.word)}">
-              <div class="craft-nose" aria-hidden="true">
-                <span class="craft-cone"></span>
-                <span class="craft-window"></span>
-              </div>
-              <div class="craft-spine">
-                ${rocketBodyHtml(rocket.characters)}
-                <div class="craft-tail" aria-hidden="true">
-                  <div class="craft-fins">
-                    <span class="fin left"></span>
-                    <span class="fin right"></span>
-                  </div>
-                  <div class="craft-thruster">
-                    <span class="craft-thruster-band"></span>
-                    <span class="craft-nozzle"></span>
+            <div class="craft-column">
+              <div class="craft craft-${esc(anim)}" data-letters="${letterCount}" aria-label="拼音火箭 ${esc(rocket.word)}">
+                <div class="craft-nose" aria-hidden="true">
+                  <span class="craft-cone"></span>
+                  <span class="craft-window"></span>
+                </div>
+                <div class="craft-spine">
+                  ${rocketBodyHtml(rocket.characters)}
+                  <div class="craft-tail" aria-hidden="true">
+                    <div class="craft-fins">
+                      <span class="fin left"></span>
+                      <span class="fin right"></span>
+                    </div>
+                    <div class="craft-thruster">
+                      <span class="craft-thruster-band"></span>
+                      <span class="craft-nozzle"></span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="craft-exhaust" aria-hidden="true">
-                <div class="craft-flame">
-                  <span class="flame outer"></span>
-                  <span class="flame inner"></span>
+                <div class="craft-exhaust" aria-hidden="true">
+                  <div class="craft-flame">
+                    <span class="flame outer"></span>
+                    <span class="flame inner"></span>
+                  </div>
+                  <div class="craft-smoke"><span></span><span></span><span></span><span></span><span></span></div>
                 </div>
-                <div class="craft-smoke"><span></span><span></span><span></span><span></span><span></span></div>
               </div>
-            </div>
-            <div class="launch-pad" aria-hidden="true">
-              <div class="pad-plumes"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-              <div class="pad-deck">
-                <span class="pad-ring"></span>
-                <span class="pad-grill"></span>
+              <div class="launch-pad" aria-hidden="true">
+                <div class="pad-plumes"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <div class="pad-deck">
+                  <span class="pad-ring"></span>
+                  <span class="pad-grill"></span>
+                </div>
+                <div class="pad-legs">
+                  <span></span><span></span><span></span><span></span>
+                </div>
+                <div class="pad-floor"></div>
               </div>
-              <div class="pad-legs">
-                <span></span><span></span><span></span><span></span>
-              </div>
-              <div class="pad-floor"></div>
             </div>
           </div>
         </div>
