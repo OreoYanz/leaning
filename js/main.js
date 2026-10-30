@@ -163,24 +163,33 @@ function clearRocketDrag() {
   document.querySelectorAll(".craft-drop.is-lifted").forEach((node) => node.classList.remove("is-lifted"));
 }
 
-/* 幽靈浮在手指上方，命中點跟著往上偏，才會對準亮起來的格子 */
-const ROCKET_AIM_LIFT = 46;
+/* 幽靈浮在手指上方；小螢幕縮短抬升，避免瞄到隔壁格 */
+function rocketAimLift() {
+  const short = window.innerHeight < 700;
+  const narrow = window.innerWidth < 430;
+  if (narrow && short) return 32;
+  if (narrow || short) return 38;
+  return 46;
+}
 
 function rocketAimPoint(clientX, clientY) {
-  return { x: clientX, y: clientY - ROCKET_AIM_LIFT };
+  return { x: clientX, y: clientY - rocketAimLift() };
 }
 
 function rocketDropAt(x, y, kind, exceptKey = "") {
   const pads = kind
     ? document.querySelectorAll(`.craft-drop[data-kind="${kind}"]`)
     : document.querySelectorAll(".craft-drop");
+  const small = window.innerWidth < 430 || window.innerHeight < 700;
+  const padX = small ? 40 : 32;
+  const padY = small ? 36 : 28;
+  const maxEdge = small ? 52 : 40;
   let best = null;
   let bestRank = Infinity;
   for (const drop of pads) {
     if (drop.disabled || drop.dataset.key === exceptKey) continue;
     const box = drop.getBoundingClientRect();
-    const padX = 32;
-    const padY = 28;
+    if (box.width < 2 || box.height < 2) continue;
     const left = box.left - padX;
     const right = box.right + padX;
     const top = box.top - padY;
@@ -188,7 +197,7 @@ function rocketDropAt(x, y, kind, exceptKey = "") {
     const dx = x < left ? left - x : x > right ? x - right : 0;
     const dy = y < top ? top - y : y > bottom ? y - bottom : 0;
     const edgeDist = Math.hypot(dx, dy);
-    if (edgeDist > 40) continue;
+    if (edgeDist > maxEdge) continue;
     const cx = box.left + box.width / 2;
     const cy = box.top + box.height / 2;
     const centerDist = Math.hypot(x - cx, y - cy);
@@ -2144,8 +2153,38 @@ document.addEventListener("pointerup", (event) => {
 
 document.addEventListener("pointercancel", (event) => {
   if (swipe && event.pointerId === swipe.pointer) swipe = null;
-  if (rocketDrag && event.pointerId === rocketDrag.pointer) clearRocketDrag();
+  if (rocketDrag && event.pointerId === rocketDrag.pointer) {
+    clearRocketDrag();
+    suppressClick = true;
+    window.setTimeout(() => { suppressClick = false; }, 0);
+  }
+  if (drag && event.pointerId === drag.pointer) {
+    drag = null;
+    const ghost = document.querySelector("#ghost");
+    if (ghost) ghost.hidden = true;
+    suppressClick = true;
+    window.setTimeout(() => { suppressClick = false; }, 0);
+  }
 });
+
+function syncAppHeight() {
+  const vv = window.visualViewport;
+  const height = Math.round(vv?.height || window.innerHeight || document.documentElement.clientHeight);
+  if (height > 0) {
+    document.documentElement.style.setProperty("--app-height", `${height}px`);
+  }
+}
+
+syncAppHeight();
+window.addEventListener("resize", syncAppHeight);
+window.addEventListener("orientationchange", () => {
+  window.setTimeout(syncAppHeight, 120);
+  window.setTimeout(syncAppHeight, 400);
+});
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", syncAppHeight);
+  window.visualViewport.addEventListener("scroll", syncAppHeight);
+}
 
 document.addEventListener("keydown", (event) => {
   if (state.gacha?.short && event.key === "Escape") {

@@ -3,16 +3,35 @@
   font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", sans-serif;
   font-size: 20px;
   line-height: 1.35;
+  /* JS 會用 visualViewport 覆寫 --app-height；無 JS 時退回 vh/dvh */
+  --app-height: 100vh;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+@supports (height: 100dvh) {
+  :root { --app-height: 100dvh; }
 }
 
 * { box-sizing: border-box; }
 
-html { scroll-padding-top: 5.6rem; }
+html {
+  scroll-padding-top: 5.6rem;
+  max-width: 100%;
+  overflow-x: hidden;
+}
 
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: var(--app-height);
+  max-width: 100%;
+  overflow-x: hidden;
   background: linear-gradient(#9ad7ff 0%, #e8f7ff 42%, #d9f5c8 100%);
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
 }
 
 body[data-scene="learn"] { background: linear-gradient(#ffe7a8 0%, #fff6df 46%, #d9f5c8 100%); }
@@ -72,7 +91,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible {
 .star { top: 28px; right: 28%; animation: twinkle 2.8s ease-in-out infinite; }
 .balloon { top: 90px; left: 18%; animation: drift 6s ease-in-out infinite alternate; }
 
-.top, #screen, .credit { position: relative; z-index: 1; }
+.top, #screen, .credit { position: relative; z-index: 1; max-width: 100%; min-width: 0; }
 
 .credit {
   margin: 18px 16px 72px;
@@ -102,9 +121,11 @@ button:focus-visible, a:focus-visible, summary:focus-visible {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 14px;
+  padding: max(10px, var(--safe-top)) 14px 10px;
   background: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(8px);
+  max-width: 100%;
+  min-width: 0;
 }
 
 .top > button { flex: 0 0 auto; }
@@ -351,8 +372,11 @@ button:focus-visible, a:focus-visible, summary:focus-visible {
 
 #screen {
   width: min(980px, 100%);
+  max-width: 100%;
+  min-width: 0;
   margin: 0 auto;
   padding: 12px 16px 28px;
+  box-sizing: border-box;
 }
 
 .home-board {
@@ -416,12 +440,12 @@ button:focus-visible, a:focus-visible, summary:focus-visible {
 .lilac { background: linear-gradient(160deg, #efe0ff, #c9a6ff); }
 
 body[data-scene="rocket"] {
-  height: 100dvh;
-  max-height: 100dvh;
+  height: var(--app-height);
+  max-height: var(--app-height);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-bottom: var(--safe-bottom);
 }
 
 body[data-scene="rocket"] .sky {
@@ -438,7 +462,7 @@ body[data-scene="rocket"] #live {
 }
 
 body[data-scene="rocket"] .top {
-  padding-top: 4px;
+  padding-top: max(4px, var(--safe-top));
   padding-bottom: 4px;
 }
 
@@ -449,13 +473,19 @@ body[data-scene="rocket"] .top h1 {
 body[data-scene="rocket"] #screen {
   flex: 1 1 auto;
   min-height: 0;
+  min-width: 0;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   position: relative;
   z-index: 1;
   width: min(980px, 100%);
-  padding: 2px 10px max(4px, env(safe-area-inset-bottom, 0px));
+  margin-inline: auto;
+  padding: 2px 10px max(4px, var(--safe-bottom));
 }
 
 body[data-scene="rocket"] .credit {
@@ -470,12 +500,17 @@ body[data-scene="rocket"] #screen > .rocket-stage {
 .stage.rocket-stage {
   flex: 1 1 auto;
   min-height: 0;
+  min-width: 0;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 6px;
   margin-top: 2px;
-  padding: 6px 8px max(8px, env(safe-area-inset-bottom, 0px));
-  overflow: hidden;
+  padding: 6px 8px max(8px, var(--safe-bottom));
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   background: rgba(255, 255, 255, 0.14);
   box-shadow: none;
 }
@@ -552,6 +587,7 @@ body.rocket-liftoff .craft-stack {
 
 .craft-wrap {
   --craft-w: 100px;
+  --craft-side: 56px;
   position: relative;
   min-height: 0;
   max-height: 100%;
@@ -564,8 +600,8 @@ body.rocket-liftoff .craft-stack {
   /* 貼近可玩區底部，高螢幕不會漂在半空 */
   justify-content: flex-end;
   gap: 4px;
-  /* 左右同寬，留給側標與翅膀，本體仍置中 */
-  padding: 8px 72px max(14px, calc(10px + env(safe-area-inset-bottom, 0px)));
+  /* 側邊空間跟螢幕寬度走，小手機才擠得下本體 */
+  padding: 8px var(--craft-side) max(14px, calc(10px + var(--safe-bottom)));
   box-sizing: border-box;
 }
 
@@ -1567,6 +1603,13 @@ body.rocket-dragging {
   -webkit-user-select: none;
 }
 
+body.rocket-dragging #screen,
+body.rocket-dragging .stage.rocket-stage {
+  overflow: hidden;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
 body.rocket-dragging .rocket-banks,
 body.rocket-dragging .craft-wrap,
 body.rocket-dragging .rocket-play {
@@ -1618,84 +1661,365 @@ body[data-scene="rocket"] .go-btn {
 }
 
 @media (max-width: 700px) {
+  :root { font-size: 18px; }
+
   .rocket-play {
-    grid-template-columns: minmax(112px, 1fr) minmax(0, 2fr);
-    gap: 6px;
+    grid-template-columns: minmax(104px, 0.95fr) minmax(0, 2.05fr);
+    gap: 4px;
   }
-  .rocket-banks { padding: 6px 8px 14px; }
+  .rocket-banks {
+    padding: 4px 6px 10px;
+    scrollbar-gutter: auto;
+    min-width: 0;
+  }
   .craft-wrap {
-    --craft-w: 92px;
-    padding-left: 68px;
-    padding-right: 68px;
+    --craft-w: 84px;
+    --craft-side: 44px;
+    min-width: 0;
+    max-width: 100%;
   }
   .craft-wrap[data-letters="1"],
-  .craft-wrap[data-letters="2"] { --craft-w: 92px; }
+  .craft-wrap[data-letters="2"] { --craft-w: 84px; }
   .craft-wrap[data-letters="4"],
-  .craft-wrap[data-letters="5"] { --craft-w: 84px; }
-  .craft-wrap[data-letters="6"] { --craft-w: 76px; }
+  .craft-wrap[data-letters="5"] { --craft-w: 76px; }
+  .craft-wrap[data-letters="6"] { --craft-w: 70px; }
   .craft-wrap[data-letters="7"],
-  .craft-wrap[data-letters="8"] { --craft-w: 70px; }
+  .craft-wrap[data-letters="8"] { --craft-w: 64px; }
+  .craft-stack { --pad-space: 42px; }
   .rocket-stage button.craft-wing {
-    right: -56px;
-    width: 56px;
-    min-width: 56px;
-    min-height: 52px;
-    font-size: 1.3rem;
+    right: -40px;
+    width: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 1.15rem;
   }
   .rocket-stage button.craft-seg {
-    min-height: 50px;
-    font-size: 1.45rem;
+    min-height: 40px;
+    font-size: 1.28rem;
   }
   .rocket-stage .rocket-parts .choice,
   .rocket-stage .rocket-tones .tone {
-    width: min(54px, 100%);
-    max-width: 54px;
+    width: min(44px, 100%);
+    max-width: 44px;
+    min-width: 40px;
+  }
+}
+
+/* 手機直向（含 iPhone 7 / 15 / Pro Max 寬度帶） */
+@media (max-width: 480px) {
+  :root { font-size: 17px; }
+
+  body[data-scene="rocket"] #screen {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .stage.rocket-stage {
+    gap: 4px;
+    padding: 4px 4px max(6px, var(--safe-bottom));
+  }
+
+  .rocket-play {
+    grid-template-columns: minmax(100px, 0.9fr) minmax(0, 2.1fr);
+    gap: 2px;
+  }
+
+  .rocket-banks { padding: 2px 4px 8px; gap: 6px; }
+
+  .craft-wrap {
+    --craft-w: 72px;
+    --craft-side: 36px;
+    padding-top: 4px;
+    padding-bottom: max(8px, var(--safe-bottom));
+  }
+
+  .craft-wrap[data-letters="1"],
+  .craft-wrap[data-letters="2"] { --craft-w: 72px; }
+  .craft-wrap[data-letters="4"],
+  .craft-wrap[data-letters="5"] { --craft-w: 66px; }
+  .craft-wrap[data-letters="6"] { --craft-w: 60px; }
+  .craft-wrap[data-letters="7"],
+  .craft-wrap[data-letters="8"],
+  .craft-wrap[data-letters="9"],
+  .craft-wrap[data-letters="10"] { --craft-w: 56px; }
+
+  .craft-stack { --pad-space: 34px; }
+  .craft-cone { height: 40px; }
+  .craft-window { width: 18px; height: 18px; top: 10px; }
+  .craft-core { padding: 2px 2px; gap: 2px; }
+  .craft-tag { font-size: 0.9rem; }
+
+  .rocket-stage button.craft-wing {
+    right: -34px;
+    width: 34px;
+    min-width: 34px;
+    min-height: 34px;
+    font-size: 1.05rem;
+    border-radius: 6px 3px 8px 3px;
+  }
+
+  .rocket-stage button.craft-seg {
+    min-height: 30px;
+    font-size: 1.12rem;
+  }
+
+  .craft[data-letters="1"] .craft-seg,
+  .craft[data-letters="2"] .craft-seg { min-height: 34px; font-size: 1.18rem; }
+  .craft[data-letters="3"] .craft-seg { min-height: 28px; font-size: 1.08rem; }
+  .craft[data-letters="4"] .craft-seg,
+  .craft[data-letters="5"] .craft-seg { min-height: 24px; font-size: 1rem; }
+  .craft[data-letters="6"] .craft-seg { min-height: 20px; font-size: 0.95rem; }
+  .craft[data-letters="7"] .craft-seg,
+  .craft[data-letters="8"] .craft-seg,
+  .craft[data-letters="9"] .craft-seg,
+  .craft[data-letters="10"] .craft-seg { min-height: 18px; font-size: 0.9rem; }
+
+  .rocket-hint {
+    min-height: 28px;
+    gap: 4px;
+    padding: 0 4px;
+  }
+  .rocket-hint .rocket-pic {
+    min-width: 36px;
+    min-height: 36px;
+  }
+  .rocket-hint .picture { font-size: 1.2rem; }
+  .rocket-word { font-size: 0.95rem; }
+
+  .rocket-stage .rocket-parts .choice,
+  .rocket-stage .rocket-tones .tone {
+    width: min(44px, 100%);
+    max-width: 44px;
+    min-width: 40px;
+    font-size: 1rem;
+    box-shadow: 0 3px 0 rgba(60, 90, 70, 0.12);
+  }
+
+  .rocket-stage .choices.rocket-parts,
+  .rocket-stage .tones.rocket-tones { gap: 5px; }
+
+  .fin {
+    width: 22px;
+    height: 26px;
+  }
+  .fin.left { left: -12px; }
+  .fin.right { right: -12px; }
+
+  .top > button.bubble {
+    min-width: 44px;
+    min-height: 44px;
   }
 }
 
 @media (max-height: 740px) {
-  .craft-wrap { --craft-w: 86px; }
-  .craft-cone { height: 52px; }
-  .rocket-stage button.craft-seg { min-height: 42px; font-size: 1.32rem; }
+  .craft-cone { height: 48px; }
+  .craft-stack { --pad-space: 40px; }
+  .rocket-stage button.craft-seg { min-height: 36px; font-size: 1.22rem; }
   .craft[data-letters="1"] .craft-seg,
-  .craft[data-letters="2"] .craft-seg { min-height: 46px; font-size: 1.4rem; }
+  .craft[data-letters="2"] .craft-seg { min-height: 40px; font-size: 1.28rem; }
   .craft[data-letters="4"] .craft-seg,
-  .craft[data-letters="5"] .craft-seg { min-height: 32px; font-size: 1.2rem; }
-  .craft[data-letters="6"] .craft-seg { min-height: 26px; font-size: 1.08rem; }
+  .craft[data-letters="5"] .craft-seg { min-height: 28px; font-size: 1.1rem; }
+  .craft[data-letters="6"] .craft-seg { min-height: 22px; font-size: 1rem; }
   .craft[data-letters="7"] .craft-seg,
-  .craft[data-letters="8"] .craft-seg { min-height: 22px; font-size: 1.02rem; }
-  .rocket-hint { min-height: 30px; }
+  .craft[data-letters="8"] .craft-seg { min-height: 18px; font-size: 0.95rem; }
+  .rocket-hint { min-height: 28px; }
   .rocket-hint .picture { font-size: 1.15rem; }
   .rocket-word { font-size: 1rem; }
   .rocket-stage .choices.rocket-parts,
   .rocket-stage .tones.rocket-tones { gap: 6px; }
-  .rocket-stage .rocket-parts .choice,
-  .rocket-stage .rocket-tones .tone {
-    width: min(50px, 100%);
-    max-width: 50px;
+}
+
+/* 矮螢幕桌面／平板才縮本體寬；手機寬度規則已處理 */
+@media (max-height: 740px) and (min-width: 701px) {
+  .craft-wrap { --craft-w: 86px; }
+}
+
+@media (max-height: 680px) {
+  .craft-cone { height: 36px; }
+  .craft-capsule { height: 8px; }
+  .craft-stack { --pad-space: 32px; }
+  .rocket-banks { gap: 4px; }
+  .rocket-stage button.craft-seg,
+  .craft[data-letters="1"] .craft-seg,
+  .craft[data-letters="2"] .craft-seg,
+  .craft[data-letters="3"] .craft-seg,
+  .craft[data-letters="4"] .craft-seg,
+  .craft[data-letters="5"] .craft-seg,
+  .craft[data-letters="6"] .craft-seg,
+  .craft[data-letters="7"] .craft-seg,
+  .craft[data-letters="8"] .craft-seg,
+  .craft[data-letters="9"] .craft-seg,
+  .craft[data-letters="10"] .craft-seg {
+    min-height: 26px;
+    font-size: 1.05rem;
+  }
+  .rocket-stage .choices.rocket-parts,
+  .rocket-stage .tones.rocket-tones { gap: 4px; }
+  .rocket-stage .rocket-tones .tone small { font-size: 0.45rem; }
+}
+
+@media (max-height: 680px) and (min-width: 701px) {
+  .craft-wrap {
+    --craft-w: 78px;
+    --craft-side: 48px;
+  }
+  .rocket-stage button.craft-wing {
+    right: -42px;
+    width: 42px;
+    min-width: 42px;
+    min-height: 38px;
   }
 }
 
-@media (max-height: 640px) {
-  .craft-wrap { --craft-w: 78px; }
-  .craft-cone { height: 44px; }
-  .craft-capsule { height: 10px; }
-  .rocket-banks { gap: 6px; }
-  .rocket-stage button.craft-seg { min-height: 34px; font-size: 1.2rem; }
-  .rocket-stage button.craft-wing {
-    right: -50px;
-    width: 50px;
-    min-width: 50px;
-    min-height: 44px;
+/* 矮手機直向（iPhone 7 等級） */
+@media (max-width: 480px) and (max-height: 700px) {
+  .craft-wrap {
+    --craft-w: 68px;
+    --craft-side: 32px;
   }
-  .rocket-stage .choices.rocket-parts,
-  .rocket-stage .tones.rocket-tones { gap: 5px; }
+  .craft-stack { --pad-space: 30px; }
+  .rocket-stage button.craft-seg,
+  .craft[data-letters="1"] .craft-seg,
+  .craft[data-letters="2"] .craft-seg,
+  .craft[data-letters="3"] .craft-seg,
+  .craft[data-letters="4"] .craft-seg,
+  .craft[data-letters="5"] .craft-seg,
+  .craft[data-letters="6"] .craft-seg,
+  .craft[data-letters="7"] .craft-seg,
+  .craft[data-letters="8"] .craft-seg,
+  .craft[data-letters="9"] .craft-seg,
+  .craft[data-letters="10"] .craft-seg {
+    min-height: 24px;
+    font-size: 1.02rem;
+  }
+  .rocket-stage button.craft-wing {
+    right: -30px;
+    width: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    font-size: 0.92rem;
+  }
+  /* 觸控目標仍盡量接近 44px */
   .rocket-stage .rocket-parts .choice,
   .rocket-stage .rocket-tones .tone {
-    width: min(46px, 100%);
-    max-width: 46px;
+    width: min(44px, 100%);
+    max-width: 44px;
+    min-width: 40px;
   }
-  .rocket-stage .rocket-tones .tone small { font-size: 0.48rem; }
+}
+
+/* 手機橫向：獨立版型，不套桌面 */
+@media (orientation: landscape) and (max-height: 500px) {
+  :root { font-size: 15px; }
+
+  body[data-scene="rocket"] .top {
+    padding-top: max(2px, var(--safe-top));
+    padding-bottom: 2px;
+  }
+  body[data-scene="rocket"] .top h1 { font-size: 0.9rem; }
+
+  .rocket-hint {
+    min-height: 24px;
+    padding: 0 4px;
+  }
+  .rocket-hint .rocket-pic {
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  .rocket-play {
+    grid-template-columns: minmax(120px, 0.75fr) minmax(0, 2.25fr);
+    gap: 6px;
+  }
+
+  .craft-wrap {
+    --craft-w: 52px;
+    --craft-side: 40px;
+    padding-top: 2px;
+    padding-bottom: max(4px, var(--safe-bottom));
+    justify-content: center;
+  }
+  .craft-stack { --pad-space: 26px; }
+  .craft-cone { height: 28px; }
+
+  .rocket-stage button.craft-seg,
+  .craft[data-letters="1"] .craft-seg,
+  .craft[data-letters="2"] .craft-seg,
+  .craft[data-letters="3"] .craft-seg,
+  .craft[data-letters="4"] .craft-seg,
+  .craft[data-letters="5"] .craft-seg,
+  .craft[data-letters="6"] .craft-seg,
+  .craft[data-letters="7"] .craft-seg,
+  .craft[data-letters="8"] .craft-seg {
+    min-height: 18px;
+    font-size: 0.92rem;
+  }
+
+  .rocket-stage button.craft-wing {
+    right: -34px;
+    width: 34px;
+    min-width: 34px;
+    min-height: 28px;
+    font-size: 0.9rem;
+  }
+
+  .rocket-stage .rocket-parts .choice,
+  .rocket-stage .rocket-tones .tone {
+    width: min(40px, 100%);
+    max-width: 40px;
+    min-width: 36px;
+  }
+
+  .rocket-banks {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 4px;
+    overflow: auto;
+  }
+  .rocket-banks .zone { width: auto; flex: 1 1 100%; }
+
+  body[data-scene="home"] {
+    height: auto;
+    max-height: none;
+    overflow: auto;
+  }
+
+  .gate {
+    min-height: 96px;
+    padding: 10px 12px;
+  }
+  .gate span { font-size: 2.2rem; }
+  .hello .parade { max-height: 120px; }
+}
+
+/* 矮直向手機：首頁可捲動，避免底部關卡被鎖死看不到 */
+@media (max-width: 480px) and (max-height: 700px) {
+  body[data-scene="home"] {
+    height: auto;
+    max-height: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .gate { min-height: 120px; padding: 12px; }
+  .gate span { font-size: 2.4rem; }
+}
+
+/* 平板：介於手機與桌面之間（含橫向平板） */
+@media (min-width: 700px) and (max-width: 1024px) and (min-height: 501px) {
+  .rocket-play {
+    grid-template-columns: minmax(132px, 1fr) minmax(0, 2.1fr);
+    gap: 10px;
+  }
+  .craft-wrap {
+    --craft-w: 96px;
+    --craft-side: 58px;
+  }
+  .rocket-stage .rocket-parts .choice,
+  .rocket-stage .rocket-tones .tone {
+    width: min(56px, 100%);
+    max-width: 56px;
+  }
 }
 
 .stage {
@@ -2271,13 +2595,13 @@ body::after {
   50% { opacity: 1; }
 }
 
-/* —— 桌面兩用：撐滿視窗，不再縮成中間一小塊 —— */
-@media (min-width: 860px) {
+/* —— 桌面：需夠寬且夠高，避免手機橫向誤套桌面版 —— */
+@media (min-width: 1025px) and (min-height: 700px) {
   :root { font-size: 21px; }
 
   body[data-scene="home"] {
-    height: 100dvh;
-    max-height: 100dvh;
+    height: var(--app-height);
+    max-height: var(--app-height);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -2446,8 +2770,7 @@ body::after {
 
   .craft-wrap {
     --craft-w: 112px;
-    padding-left: 72px;
-    padding-right: 72px;
+    --craft-side: 64px;
     padding-bottom: max(18px, calc(12px + env(safe-area-inset-bottom, 0px)));
   }
 
@@ -2459,7 +2782,7 @@ body::after {
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1200px) and (min-height: 700px) {
   :root { font-size: 22px; }
 
   body[data-scene="home"] #screen {
